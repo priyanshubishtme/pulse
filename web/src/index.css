@@ -1,12 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply font-body text-textPrimary bg-sand;
+  :root {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #092844;
+    background: #F4F1EC;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
   }
+
+  html {
+    background: #F4F1EC;
+  }
+
+  body {
+    @apply min-w-0 bg-app font-body text-textPrimary antialiased;
+    margin: 0;
+  }
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight text-navy-900;
+    @apply font-display tracking-[-0.03em] text-ink;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-app;
+  }
+
+  ::selection {
+    background: #E8EFFE;
+    color: #092844;
+  }
+}
+
+@layer components {
+  .app-card {
+    @apply rounded-[24px] bg-cream;
+  }
+
+  .app-input {
+    @apply h-12 w-full rounded-[11px] border border-slate-500/70 bg-cream px-4 text-sm text-ink placeholder:text-textMuted transition focus:border-primary focus:ring-2 focus:ring-primary/20;
+  }
+
+  .app-button {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[11px] px-5 text-sm font-bold transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .app-button-primary {
+    @apply app-button bg-primary text-cream hover:bg-blue-700;
+  }
+
+  .app-button-outline {
+    @apply app-button border border-slate-500/80 bg-cream text-ink hover:bg-sand;
+  }
+
+  .app-button-soft {
+    @apply app-button bg-sand text-ink hover:bg-line;
   }
 }
