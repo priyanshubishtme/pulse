@@ -9,7 +9,7 @@ router.post('/signup', async (req, res, next) => {
   try {
     const data = signupSchema.parse(req.body);
     const { user, token } = await signup(data);
-    
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: config.isProd,
@@ -27,7 +27,7 @@ router.post('/login', async (req, res, next) => {
   try {
     const data = loginSchema.parse(req.body);
     const { user, token } = await login(data);
-    
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: config.isProd,

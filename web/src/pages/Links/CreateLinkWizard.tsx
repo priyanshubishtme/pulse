@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../../api/client';
 import { clsx } from 'clsx';
-import { useAuth } from '../../context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
 
 export const CreateLinkWizard = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) => {
   const [step, setStep] = useState(1);
@@ -11,11 +11,16 @@ export const CreateLinkWizard = ({ onClose, onSuccess }: { onClose: () => void, 
   const [password, setPassword] = useState('');
   const [clickLimit, setClickLimit] = useState('');
   const [expiresAt, setExpiresAt] = useState('');
-  
+  const [campaignId, setCampaignId] = useState('');
+  const [tagIds, setTagIds] = useState<string[]>([]);
+
   const [aliasStatus, setAliasStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
   const [aliasReason, setAliasReason] = useState('');
   const [issues, setIssues] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: campaigns } = useQuery({ queryKey: ['campaigns'], queryFn: async () => (await apiClient.get('/campaigns')).data.campaigns });
+  const { data: tags } = useQuery({ queryKey: ['tags'], queryFn: async () => (await apiClient.get('/tags')).data.tags });
 
   useEffect(() => {
     if (!alias) {
@@ -62,12 +67,14 @@ export const CreateLinkWizard = ({ onClose, onSuccess }: { onClose: () => void, 
         title: title || undefined,
         password: password || undefined,
         clickLimit: clickLimit ? parseInt(clickLimit, 10) : undefined,
-        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : undefined
+        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : undefined,
+        campaignId: campaignId || undefined,
+        tagIds: tagIds.length > 0 ? tagIds : undefined
       };
-      
+
       const valRes = await apiClient.post('/links/validate', payload);
       setIssues(valRes.data.issues);
-      
+
       if (valRes.data.issues.some((i: any) => i.level === 'error')) {
         setIsSubmitting(false);
         return;
@@ -85,9 +92,18 @@ export const CreateLinkWizard = ({ onClose, onSuccess }: { onClose: () => void, 
     }
   };
 
+  const toggleTag = (id: string) => {
+    if (tagIds.includes(id)) {
+      setTagIds(tagIds.filter(t => t !== id));
+    } else {
+      if (tagIds.length >= 10) return alert('Max 10 tags');
+      setTagIds([...tagIds, id]);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-navy-900/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-cream rounded-2xl w-full max-w-2xl overflow-hidden flex shadow-2xl">
+      <div className="bg-cream rounded-2xl w-full max-w-2xl overflow-hidden flex shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex-1 p-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-display font-bold">Create Link</h2>
@@ -126,8 +142,8 @@ export const CreateLinkWizard = ({ onClose, onSuccess }: { onClose: () => void, 
                 </div>
               )}
 
-              <button 
-                onClick={validateStep1} 
+              <button
+                onClick={validateStep1}
                 disabled={!url || aliasStatus === 'checking' || aliasStatus === 'taken'}
                 className="w-full bg-primary text-cream py-3 rounded-[10px] font-medium mt-6 disabled:opacity-50"
               >
@@ -138,6 +154,29 @@ export const CreateLinkWizard = ({ onClose, onSuccess }: { onClose: () => void, 
 
           {step === 2 && (
             <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Campaign</label>
+                  <select value={campaignId} onChange={e => setCampaignId(e.target.value)} className="w-full px-4 py-2 border border-line rounded-[10px] outline-none">
+                    <option value="">None</option>
+                    {campaigns?.filter((c: any) => c.state !== 'ARCHIVED').map((c: any) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Tags (Max 10)</label>
+                  <div className="relative border border-line rounded-[10px] p-2 flex flex-wrap gap-1 max-h-24 overflow-y-auto">
+                    {tags?.map((t: any) => (
+                      <button key={t.id} onClick={() => toggleTag(t.id)}
+                        className={clsx("text-xs px-2 py-1 rounded-full border", tagIds.includes(t.id) ? "bg-primary text-cream border-primary" : "bg-sand text-textMuted border-line")}>
+                        {t.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium mb-1">Title (optional)</label>
                 <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full px-4 py-2 border border-line rounded-[10px] outline-none" />

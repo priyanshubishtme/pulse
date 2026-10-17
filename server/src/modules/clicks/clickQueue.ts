@@ -1,6 +1,6 @@
 import geoip from 'geoip-lite';
 import { UAParser } from 'ua-parser-js';
-import isbot from 'isbot';
+import { isbot } from 'isbot'; // fixed import
 import crypto from 'crypto';
 import prisma from '../../lib/prisma';
 import { config } from '../../config';
@@ -11,7 +11,6 @@ export interface ClickEventInput {
   ip: string;
   userAgent: string;
   referrer?: string;
-  // added for atomic updates on queue flush
   hasClickLimit: boolean;
 }
 
@@ -56,9 +55,9 @@ function enrichClick(input: ClickEventInput) {
   const parser = new UAParser(input.userAgent);
   const result = parser.getResult();
   const bot = isbot(input.userAgent);
-  
-  const ipToUse = (process.env.NODE_ENV === 'development' && process.env.GEO_DEV_IP_OVERRIDE) 
-    ? process.env.GEO_DEV_IP_OVERRIDE 
+
+  const ipToUse = (process.env.NODE_ENV === 'development' && process.env.GEO_DEV_IP_OVERRIDE)
+    ? process.env.GEO_DEV_IP_OVERRIDE
     : input.ip;
 
   const geo = geoip.lookup(ipToUse);
@@ -78,7 +77,7 @@ function enrichClick(input: ClickEventInput) {
     city: geo?.city || null,
     lat: geo?.ll ? parseFloat(geo.ll[0].toFixed(1)) : null,
     lng: geo?.ll ? parseFloat(geo.ll[1].toFixed(1)) : null,
-    _hasClickLimit: input.hasClickLimit // Used internally for flushing logic
+    _hasClickLimit: input.hasClickLimit
   };
 }
 
@@ -91,7 +90,7 @@ export function enqueueBlock(input: BlockedAttemptInput) {
   const bot = isbot(input.userAgent);
   const ipToUse = (process.env.NODE_ENV === 'development' && process.env.GEO_DEV_IP_OVERRIDE) ? process.env.GEO_DEV_IP_OVERRIDE : input.ip;
   const geo = geoip.lookup(ipToUse);
-  
+
   blockBuffer.push({
     linkId: input.linkId,
     reason: input.reason,
@@ -131,13 +130,12 @@ async function flush() {
       });
       await prisma.clickEvent.createMany({ data: dbClicks });
 
-      // Group human clicks for links WITHOUT limits to increment asynchronously in batch
       const humanClicksNoLimit = clicksToFlush.filter(c => !c.isBot && !c._hasClickLimit);
       const increments: Record<string, number> = {};
       for (const click of humanClicksNoLimit) {
         increments[click.linkId] = (increments[click.linkId] || 0) + 1;
       }
-      
+
       for (const [linkId, count] of Object.entries(increments)) {
         await prisma.link.update({
           where: { id: linkId },
@@ -153,6 +151,5 @@ async function flush() {
   }
 }
 
-// Graceful shutdown
 process.on('SIGTERM', flush);
 process.on('SIGINT', flush);

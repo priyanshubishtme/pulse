@@ -17,7 +17,7 @@ export const Links = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-display font-bold">Links</h1>
-        <button 
+        <button
           onClick={() => setIsWizardOpen(true)}
           className="bg-primary text-cream px-4 py-2 rounded-[10px] font-medium"
         >

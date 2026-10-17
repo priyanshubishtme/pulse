@@ -12,7 +12,7 @@ router.get('/check-alias', requireAuth, async (req, res, next) => {
   try {
     const alias = req.query.alias as string;
     if (!alias) return res.status(400).json({ error: { code: 'MISSING_ALIAS', message: 'Alias query parameter required' } });
-    
+
     const result = await checkAlias(alias);
     res.json(result);
   } catch (err) {
@@ -47,17 +47,62 @@ router.get('/', requireAuth, async (req: AuthRequest, res, next) => {
   }
 });
 
+router.post('/bulk-move', requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const { linkIds, campaignId } = req.body;
+    if (!Array.isArray(linkIds)) return res.status(400).json({ error: { message: 'linkIds must be an array' } });
+
+    if (campaignId) {
+      const campaign = await prisma.campaign.findUnique({ where: { id: campaignId } });
+      if (!campaign || campaign.ownerId !== req.user!.id) throw { status: 404, message: 'Campaign not found' };
+      if (campaign.archivedAt) throw { status: 400, message: 'Cannot move to archived campaign' };
+    }
+
+    const { count } = await prisma.link.updateMany({
+      where: { id: { in: linkIds }, ownerId: req.user!.id },
+      data: { campaignId: campaignId || null }
+    });
+
+    res.json({ success: true, count });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/bulk-tag', requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const { linkIds, tagIds } = req.body;
+    if (!Array.isArray(linkIds) || !Array.isArray(tagIds)) return res.status(400).json({ error: { message: 'Arrays expected' } });
+
+    const tags = await prisma.tag.findMany({ where: { id: { in: tagIds }, ownerId: req.user!.id } });
+    if (tags.length !== tagIds.length) throw { status: 400, message: 'Invalid tags' };
+
+    const links = await prisma.link.findMany({ where: { id: { in: linkIds }, ownerId: req.user!.id } });
+
+    for (const link of links) {
+      await prisma.linkTag.deleteMany({ where: { linkId: link.id } });
+      await prisma.linkTag.createMany({
+        data: tagIds.map((t: string) => ({ linkId: link.id, tagId: t }))
+      });
+    }
+
+    res.json({ success: true, count: links.length });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.patch('/:id', requireAuth, async (req: AuthRequest, res, next) => {
   try {
-    const link = await prisma.link.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const link = await prisma.link.findUnique({ where: { id } });
     if (!link || link.ownerId !== req.user!.id) {
       return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Link not found' } });
     }
 
-    // Process basic status toggling or extensions here...
     const updated = await prisma.link.update({
-      where: { id: link.id },
-      data: req.body // Normally validate via zod, simplified for brevity
+      where: { id },
+      data: req.body
     });
 
     linkCache.delete(updated.alias);
@@ -69,12 +114,13 @@ router.patch('/:id', requireAuth, async (req: AuthRequest, res, next) => {
 
 router.delete('/:id', requireAuth, async (req: AuthRequest, res, next) => {
   try {
-    const link = await prisma.link.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const link = await prisma.link.findUnique({ where: { id } });
     if (!link || link.ownerId !== req.user!.id) {
       return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Link not found' } });
     }
 
-    await prisma.link.delete({ where: { id: link.id } });
+    await prisma.link.delete({ where: { id } });
     linkCache.delete(link.alias);
 
     res.status(204).send();

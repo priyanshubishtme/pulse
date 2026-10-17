@@ -17,7 +17,7 @@ export async function generateAlias(length = 7): Promise<string> {
       }
       if (alias.length === length) break;
     }
-    
+
     // ensure it matches regex constraints
     if (!ALIAS_REGEX.test(alias) || alias.length !== length) {
       continue;
@@ -27,7 +27,7 @@ export async function generateAlias(length = 7): Promise<string> {
     if (available) return alias;
     attempts++;
   }
-  
+
   // lengthen on collisions
   return generateAlias(length + 1);
 }

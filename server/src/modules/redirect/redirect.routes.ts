@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import prisma from '../../lib/prisma';
 import bcrypt from 'bcrypt';
-import isbot from 'isbot';
+import { isbot } from 'isbot'; // Changed to named import for isbot which fixes the runtime/vitest issue in isbot v3+
 import { linkCache } from './linkCache';
 import { effectiveStatus } from './ruleEngine';
 import { enqueueClick, enqueueBlock } from '../clicks/clickQueue';
@@ -49,7 +49,7 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
   } catch {}
 
   const decision = effectiveStatus(link, new Date(), true, isDomainBlocked);
-  
+
   if (decision === 'EXPIRED' || decision === 'DISABLED' || decision === 'LIMIT_REACHED') {
     enqueueBlock({
       linkId: link.id,
@@ -75,12 +75,10 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
 async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) {
   const userAgent = req.headers['user-agent'] || '';
   const bot = isbot(userAgent);
-  
-  // We only increment atomically here if it's a human. 
-  // Non-limited links are incremented in the batch queue.
+
   if (link.clickLimit !== null && !bot) {
     const res = await prisma.$executeRaw`
-      UPDATE "Link" SET "clickCount" = "clickCount" + 1 
+      UPDATE "Link" SET "clickCount" = "clickCount" + 1
       WHERE id = ${link.id} AND "clickCount" < ${link.clickLimit}
     `;
     if (res === 0) {
@@ -100,7 +98,7 @@ async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) 
 
 async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
   const alias = (req.params.alias as string).toLowerCase();
-  
+
   let link = linkCache.get(alias);
   if (!link) {
     link = await prisma.link.findUnique({ where: { alias } });
@@ -147,6 +145,7 @@ async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
     await processValidRedirect(link, source, req);
     return res.redirect(302, link!.destinationUrl);
   } catch (err: any) {
+    console.error('Redirect Error:', err);
     if (err.message === 'LIMIT_REACHED') {
       return res.redirect(302, `${config.appUrl}/status/limit-reached`);
     }
