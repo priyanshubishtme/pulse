@@ -5,6 +5,7 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { Dashboard } from './pages/Dashboard';
 import { Links } from './pages/Links/Links';
+import { CreateLinkWizard } from './pages/Links/CreateLinkWizard';
 import { Campaigns } from './pages/Campaigns/Campaigns';
 import { CampaignDetail } from './pages/Campaigns/CampaignDetail';
 import { Analytics } from './pages/Analytics/Analytics';
@@ -27,6 +28,7 @@ export const AppRoutes = () => {
         <Route element={<Shell />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/links" element={<Links />} />
+          <Route path="/create-link" element={<CreateLinkWizard standalone />} />
           <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/campaigns/:id" element={<CampaignDetail />} />
           <Route path="/analytics" element={<Analytics />} />
