@@ -23,10 +23,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    void checkAuth();
-  }, []);
-
   async function checkAuth() {
     try {
       const res = await apiClient.get('/auth/me');
@@ -37,6 +33,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    void checkAuth();
+  }, []);
 
   const login = async (data: any) => {
     const res = await apiClient.post('/auth/login', data);
