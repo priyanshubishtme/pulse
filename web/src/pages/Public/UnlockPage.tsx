@@ -1,44 +1,7 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { ArrowRight, LockKeyhole } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Button, Card, Field, TextInput } from '../../components/ui';
 
-export const UnlockPage = () => {
-  const { alias } = useParams();
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`/api/public/unlock/${alias}`, { password });
-      window.location.href = res.data.destinationUrl; // Follow redirect directly
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Incorrect password');
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-sand text-center p-4">
-      <div className="bg-cream p-8 rounded-[24px] shadow-sm max-w-md w-full border border-line">
-        <h1 className="text-2xl font-display font-bold text-navy-900 mb-6">Password Required</h1>
-        <p className="text-textMuted mb-6">Enter the correct password to continue.</p>
-
-        {error && <div className="text-danger mb-4 p-3 bg-red-50 rounded-lg">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-            className="w-full px-4 py-2 border border-line rounded-[10px] focus:ring-primary outline-none"
-          />
-          <button type="submit" className="w-full bg-primary text-cream py-3 rounded-[10px] font-medium">
-            Unlock
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
+export const UnlockPage = () => { const { alias } = useParams(); const [password, setPassword] = useState(''); const [error, setError] = useState(''); const handleSubmit = async (event: React.FormEvent) => { event.preventDefault(); setError(''); try { const response = await axios.post(`/api/public/unlock/${alias}`, { password }); window.location.href = response.data.destinationUrl; } catch (err: any) { setError(err.response?.data?.error?.message || 'Incorrect password'); } }; return <div className="min-h-screen bg-navy-900 px-5 py-8 text-cream sm:px-10"><header><Link to="/login" className="text-2xl font-extrabold tracking-[-0.06em]">Link<span className="text-accent">Pulse</span></Link></header><main className="mx-auto flex min-h-[75vh] max-w-md items-center justify-center"><Card className="w-full p-8 text-ink sm:p-10"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-paleBlue text-primary"><LockKeyhole className="h-6 w-6" /></div><h1 className="mt-7 text-2xl font-extrabold">Password required</h1><p className="mt-3 text-sm leading-6 text-textMuted">Enter the password for this destination to continue.</p>{error && <div className="mt-6 rounded-xl bg-paleOrange p-4 text-sm text-danger" role="alert">{error}</div>}<form onSubmit={handleSubmit} className="mt-7 space-y-5"><Field label="Password"><TextInput type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Enter password" required autoComplete="current-password" /></Field><Button type="submit" className="w-full">Unlock destination <ArrowRight className="h-4 w-4" /></Button></form></Card></main></div>; };

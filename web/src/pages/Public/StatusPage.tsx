@@ -1,28 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { ArrowLeft, CircleAlert } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Card } from '../../components/ui';
 
-const messages: Record<string, string> = {
-  'not-found': 'This short link does not exist.',
-  'disabled': 'This short link is disabled.',
-  'expired': 'This short link has expired.',
-  'limit-reached': 'This short link has reached its click limit.',
-};
+const messages: Record<string, { title: string; detail: string }> = { 'not-found': { title: 'This short link does not exist.', detail: 'The address may be incorrect or the link may have been removed.' }, disabled: { title: 'This short link is disabled.', detail: 'The link owner has paused this destination.' }, expired: { title: 'This short link has expired.', detail: 'The link owner set an expiry date that has passed.' }, 'limit-reached': { title: 'This short link has reached its click limit.', detail: 'The destination is no longer accepting new visits.' } };
 
-export const StatusPage = () => {
-  const { reason } = useParams();
-  const message = messages[reason as string] || 'Unknown status.';
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-sand text-center p-4">
-      <div className="bg-cream p-12 rounded-[24px] shadow-sm max-w-lg w-full border border-line">
-        <div className="mb-6">
-          <svg className="w-16 h-16 mx-auto text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        </div>
-        <h1 className="text-2xl font-display font-bold text-navy-900 mb-4">{message}</h1>
-        <p className="text-textMuted">If you believe this is an error, please contact the link owner.</p>
-        <a href="/" className="mt-8 inline-block text-primary font-medium hover:underline">Go to LinkPulse</a>
-      </div>
-    </div>
-  );
-};
+export const StatusPage = () => { const { reason } = useParams(); const copy = messages[reason as string] || { title: 'This link is unavailable.', detail: 'The destination could not be opened.' }; return <div className="min-h-screen bg-navy-900 px-5 py-8 text-cream sm:px-10"><header className="flex items-center justify-between"><Link to="/login" className="text-2xl font-extrabold tracking-[-0.06em]">Link<span className="text-accent">Pulse</span></Link><Button onClick={() => window.location.assign('/login')}>Open workspace</Button></header><main className="mx-auto flex min-h-[75vh] max-w-2xl items-center justify-center"><Card className="w-full p-8 text-center sm:p-12"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-paleOrange text-danger"><CircleAlert className="h-7 w-7" /></div><p className="mt-7 text-xs font-bold uppercase tracking-[0.18em] text-textMuted">LinkPulse status</p><h1 className="mt-4 text-3xl font-extrabold">{copy.title}</h1><p className="mx-auto mt-4 max-w-md text-sm leading-6 text-textMuted">{copy.detail} If you believe this is an error, contact the link owner.</p><Link to="/login" className="mt-8 inline-flex"><Button variant="outline"><ArrowLeft className="h-4 w-4" />Go to LinkPulse</Button></Link></Card></main></div>; };

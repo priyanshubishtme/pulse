@@ -1,55 +1,12 @@
 import React, { useState } from 'react';
+import { ArrowRight, Link2 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Button, Card, Field, TextInput } from '../components/ui';
 
 export const Signup = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { signup } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    try {
-      await signup({ name, email, password });
-      navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Signup failed');
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-sand">
-      <div className="bg-cream p-8 rounded-[24px] shadow-sm max-w-md w-full border border-line">
-        <h1 className="text-3xl font-display font-bold text-navy-900 mb-6">Sign up</h1>
-        {error && <div className="text-danger mb-4 p-3 bg-red-50 rounded-lg">{error}</div>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} required
-              className="w-full px-4 py-2 border border-line rounded-[10px] focus:ring-2 focus:ring-primary outline-none" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-              className="w-full px-4 py-2 border border-line rounded-[10px] focus:ring-2 focus:ring-primary outline-none" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              className="w-full px-4 py-2 border border-line rounded-[10px] focus:ring-2 focus:ring-primary outline-none" />
-          </div>
-          <button type="submit" className="w-full bg-primary text-cream py-3 rounded-[10px] font-medium mt-4">
-            Create Account
-          </button>
-        </form>
-        <div className="mt-6 text-center text-sm text-textMuted">
-          Already have an account? <Link to="/login" className="text-primary hover:underline">Log in</Link>
-        </div>
-      </div>
-    </div>
-  );
+  const [name, setName] = useState(''); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [error, setError] = useState('');
+  const { signup } = useAuth(); const navigate = useNavigate();
+  const handleSubmit = async (event: React.FormEvent) => { event.preventDefault(); setError(''); try { await signup({ name, email, password }); navigate('/dashboard'); } catch (err: any) { setError(err.response?.data?.error?.message || 'Signup failed'); } };
+  return <div className="min-h-screen bg-navy-900 px-5 py-8 text-cream sm:px-10"><header className="flex items-center justify-between"><Link to="/login" className="text-2xl font-extrabold tracking-[-0.06em]">Link<span className="text-accent">Pulse</span></Link><Link to="/login" className="text-sm font-bold text-slate-300 hover:text-cream">Already a member?</Link></header><main className="mx-auto grid max-w-5xl items-center gap-12 py-16 lg:grid-cols-[1fr_420px] lg:py-24"><div><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent"><Link2 className="h-6 w-6" /></div><p className="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-slate-300">Start with a clear signal</p><h1 className="mt-5 max-w-xl text-4xl font-extrabold leading-tight sm:text-5xl">Small links. Big signals.</h1><p className="mt-6 max-w-lg text-base leading-7 text-slate-300">Create your workspace and bring links, campaigns, QR codes, and analytics into one calm place.</p></div><Card className="p-7 text-ink sm:p-9"><h2 className="text-2xl font-extrabold">Create your workspace.</h2><p className="mt-2 text-sm text-textMuted">Your timezone is saved for clearer analytics.</p>{error && <div className="mt-6 rounded-xl bg-paleOrange p-4 text-sm text-danger" role="alert">{error}</div>}<form onSubmit={handleSubmit} className="mt-7 space-y-5"><Field label="Name"><TextInput value={name} onChange={(event) => setName(event.target.value)} required autoComplete="name" /></Field><Field label="Email"><TextInput type="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" /></Field><Field label="Password" hint="Use at least 6 characters."><TextInput type="password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={6} autoComplete="new-password" /></Field><Button type="submit" className="w-full">Create account <ArrowRight className="h-4 w-4" /></Button></form><p className="mt-7 text-center text-sm text-textMuted">Already have an account? <Link to="/login" className="font-bold text-primary hover:underline">Log in</Link></p></Card></main></div>;
 };

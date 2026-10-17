@@ -1,47 +1,9 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { ArrowLeft, CalendarDays, LoaderCircle } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiClient } from '../../api/client';
 import { TrafficChart } from '../../components/charts/TrafficChart';
+import { Button, Card, PageHeader, Select, StatCard, StatusBadge } from '../../components/ui';
 
-export const CampaignDetail = () => {
-  const { id } = useParams();
-  const [range, setRange] = useState('30');
-
-  const { data: campaign } = useQuery({ queryKey: ['campaign', id], queryFn: async () => (await apiClient.get('/campaigns')).data.campaigns.find((c: any) => c.id === id) });
-  const { data: kpis } = useQuery({ queryKey: ['analytics', 'overview', id, range], queryFn: async () => (await apiClient.get(`/analytics/overview?range=${range}&campaignId=${id}`)).data });
-  const { data: timeseries } = useQuery({ queryKey: ['analytics', 'timeseries', id, range], queryFn: async () => (await apiClient.get(`/analytics/timeseries?range=${range}&campaignId=${id}`)).data.series });
-
-  if (!campaign) return <div>Loading...</div>;
-
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center bg-cream p-6 rounded-2xl shadow-sm border border-line">
-        <div>
-          <h1 className="text-2xl font-display font-bold mb-1">{campaign.name}</h1>
-          <div className="text-sm text-textMuted uppercase">{campaign.category}</div>
-        </div>
-        <select value={range} onChange={e => setRange(e.target.value)} className="bg-sand border border-line rounded-[10px] px-4 py-2 outline-none text-sm">
-          <option value="30">Last 30 days</option>
-          <option value="all">All time</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-2 gap-6">
-        <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-          <div className="text-sm text-textMuted mb-2">Total Clicks</div>
-          <div className="text-3xl font-display font-bold text-navy-900">{kpis?.clicks.current || 0}</div>
-        </div>
-        <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-          <div className="text-sm text-textMuted mb-2">Unique Visitors</div>
-          <div className="text-3xl font-display font-bold text-navy-900">{kpis?.uniqueVisitors.current || 0}</div>
-        </div>
-      </div>
-
-      <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-        <h2 className="text-lg font-display font-bold mb-4">Traffic over time</h2>
-        {timeseries && <TrafficChart data={timeseries} />}
-      </div>
-    </div>
-  );
-};
+export const CampaignDetail = () => { const { id } = useParams(); const navigate = useNavigate(); const [range, setRange] = useState('30'); const { data: campaign } = useQuery({ queryKey: ['campaign', id], queryFn: async () => (await apiClient.get('/campaigns')).data.campaigns.find((item: any) => item.id === id) }); const { data: kpis } = useQuery({ queryKey: ['analytics', 'overview', id, range], queryFn: async () => (await apiClient.get(`/analytics/overview?range=${range}&campaignId=${id}`)).data, enabled: Boolean(id) }); const { data: timeseries, isLoading } = useQuery({ queryKey: ['analytics', 'timeseries', id, range], queryFn: async () => (await apiClient.get(`/analytics/timeseries?range=${range}&campaignId=${id}`)).data.series, enabled: Boolean(id) }); if (!campaign) return <div className="flex min-h-96 items-center justify-center text-sm text-textMuted"><LoaderCircle className="mr-2 h-4 w-4 animate-spin" />Loading campaign…</div>; return <div><PageHeader current="Campaign detail" title={campaign.name} description={campaign.description || 'A focused view of this campaign’s link performance.'} actions={<><StatusBadge status={campaign.state} /><div className="relative"><CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-textMuted" /><Select value={range} onChange={(event) => setRange(event.target.value)} className="w-[165px] pl-11"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option><option value="all">All time</option></Select></div><Button variant="outline" onClick={() => navigate('/campaigns')}><ArrowLeft className="h-4 w-4" />Campaigns</Button></>} /><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"><StatCard label="Clicks" value={(kpis?.clicks?.current || 0).toLocaleString('en-IN')} helper="Selected period" highlight /><StatCard label="Unique visitors" value={(kpis?.uniqueVisitors?.current || 0).toLocaleString('en-IN')} helper="Distinct visitor hashes" /><StatCard label="Links" value={campaign.linksCount || 0} helper="Assigned to campaign" /></div><Card className="mt-6 p-6 sm:p-7"><h2 className="text-lg font-extrabold">Traffic over time</h2><p className="mt-1 text-xs text-textMuted">Campaign clicks · bots excluded</p>{isLoading ? <div className="flex h-64 items-center justify-center text-sm text-textMuted">Loading traffic…</div> : <TrafficChart data={timeseries || []} />}</Card></div>; };

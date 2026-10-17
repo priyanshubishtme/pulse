@@ -1,94 +1,50 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ArrowRight, CalendarDays, LoaderCircle, RotateCcw } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { TrafficChart } from '../../components/charts/TrafficChart';
-import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { Button, Card, PageHeader, Select, StatCard } from '../../components/ui';
+import { useNavigate } from 'react-router-dom';
 
-const COLORS = ['#0F5BE6', '#F26B0F', '#1E8E4E', '#E8A317', '#D93025', '#04213F', '#5B6B7F'];
+const percent = (count: number, total: number) => total ? `${Math.round((count / total) * 100)}%` : '0%';
+const channelLabel = (value: string) => value.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 
 export const Analytics = () => {
+  const navigate = useNavigate();
   const [range, setRange] = useState('30');
+  const [campaignId, setCampaignId] = useState('');
+  const [country, setCountry] = useState('');
+  const [channel, setChannel] = useState('');
+  const [device, setDevice] = useState('');
+  const querySuffix = `${campaignId ? `&campaignId=${campaignId}` : ''}${country ? `&country=${country}` : ''}`;
 
-  const { data: timeseries } = useQuery({ queryKey: ['analytics', 'timeseries', range], queryFn: async () => (await apiClient.get(`/analytics/timeseries?range=${range}`)).data.series });
-  const { data: breakdowns } = useQuery({ queryKey: ['analytics', 'breakdowns', range], queryFn: async () => (await apiClient.get(`/analytics/breakdowns?range=${range}`)).data });
-  const { data: geo } = useQuery({ queryKey: ['analytics', 'geo', range], queryFn: async () => (await apiClient.get(`/analytics/geo?range=${range}`)).data });
+  const { data: kpis, isLoading: kpisLoading } = useQuery({ queryKey: ['analytics', 'overview', range, campaignId, country], queryFn: async () => (await apiClient.get(`/analytics/overview?range=${range}${querySuffix}`)).data });
+  const { data: timeseries, isLoading: seriesLoading } = useQuery({ queryKey: ['analytics', 'timeseries', range, campaignId, country], queryFn: async () => (await apiClient.get(`/analytics/timeseries?range=${range}${querySuffix}`)).data.series });
+  const { data: breakdowns, isLoading: breakdownsLoading } = useQuery({ queryKey: ['analytics', 'breakdowns', range, campaignId, country], queryFn: async () => (await apiClient.get(`/analytics/breakdowns?range=${range}${querySuffix}`)).data });
+  const { data: geo } = useQuery({ queryKey: ['analytics', 'geo', range, campaignId, country], queryFn: async () => (await apiClient.get(`/analytics/geo?range=${range}${querySuffix}`)).data });
+  const { data: campaigns = [] } = useQuery({ queryKey: ['campaigns'], queryFn: async () => (await apiClient.get('/campaigns')).data.campaigns });
+
+  const channelTotal = useMemo(() => (breakdowns?.channels || []).reduce((sum: number, item: { count: number }) => sum + item.count, 0), [breakdowns]);
+  const deviceTotal = useMemo(() => (breakdowns?.devices || []).reduce((sum: number, item: { count: number }) => sum + item.count, 0), [breakdowns]);
+  const topCountry = [...(geo?.countries || [])].sort((a: { count: number }, b: { count: number }) => b.count - a.count)[0];
+  const reset = () => { setCampaignId(''); setCountry(''); setChannel(''); setDevice(''); };
+  const selectedChannel = channel ? channelLabel(channel) : [...(breakdowns?.channels || [])].sort((a: { count: number }, b: { count: number }) => b.count - a.count)[0]?.name ? channelLabel([...breakdowns.channels].sort((a: { count: number }, b: { count: number }) => b.count - a.count)[0].name) : 'your strongest channel';
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center bg-cream p-4 rounded-2xl shadow-sm border border-line">
-        <h1 className="text-xl font-display font-bold">Analytics Showcase</h1>
-        <div className="flex gap-4 items-center">
-          <select value={range} onChange={e => setRange(e.target.value)} className="bg-sand border border-line rounded-[10px] px-4 py-2 outline-none text-sm">
-            <option value="7">Last 7 days</option>
-            <option value="30">Last 30 days</option>
-            <option value="90">Last 90 days</option>
-            <option value="all">All time</option>
-          </select>
-        </div>
-      </div>
+    <div>
+      <PageHeader current="Analytics" title="The bigger picture." description="Know who’s clicking, where they’re coming from, and what’s working." actions={<><div className="relative"><CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-textMuted" aria-hidden="true" /><Select value={range} onChange={(event) => setRange(event.target.value)} className="w-[170px] pl-11"><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option><option value="all">All time</option></Select></div><Button onClick={() => navigate('/create-link')}>+ Create link</Button></>} />
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5"><StatCard label="Clicks" value={kpisLoading ? <LoaderCircle className="h-7 w-7 animate-spin" /> : (kpis?.clicks?.current || 0).toLocaleString('en-IN')} delta={kpis ? `${kpis.clicks.previous ? '+' + Math.round(((kpis.clicks.current - kpis.clicks.previous) / kpis.clicks.previous) * 100) : 0}% vs previous period` : undefined} helper="Human clicks" highlight /><StatCard label="Unique visitors" value={kpisLoading ? <LoaderCircle className="h-7 w-7 animate-spin" /> : (kpis?.uniqueVisitors?.current || 0).toLocaleString('en-IN')} delta="Distinct visitors" helper="Privacy-conscious hashes" /><StatCard label="Active links" value={kpis?.activeLinks || 0} delta="Live right now" helper="Across your workspace" /><StatCard label="Top channel" value={selectedChannel} delta={channel ? 'Selected filter' : 'Current period'} helper="From recorded traffic" /><StatCard label="Bot traffic" value="Excluded" delta="Human traffic only" helper="Analytics default" /></div>
 
-      <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-        <h2 className="text-lg font-display font-bold mb-4">Traffic over time</h2>
-        {timeseries ? <TrafficChart data={timeseries} /> : <div className="h-64 flex items-center justify-center text-textMuted">Loading chart...</div>}
-      </div>
+      <Card className="mt-6 flex flex-wrap items-center gap-3 p-4 sm:p-5"><span className="px-1 text-sm text-textMuted">Filter by</span><Select value={channel} onChange={(event) => setChannel(event.target.value)} className={channel ? 'border-primary bg-paleBlue text-primary' : 'min-w-[160px] bg-sand'}><option value="">All channels</option>{(breakdowns?.channels || []).map((item: { name: string }) => <option key={item.name} value={item.name}>{channelLabel(item.name)}</option>)}</Select><Select value={country} onChange={(event) => setCountry(event.target.value)} className="min-w-[160px] bg-sand"><option value="">All countries</option>{(geo?.countries || []).map((item: { country: string }) => <option key={item.country} value={item.country}>{item.country}</option>)}</Select><Select value={device} onChange={(event) => setDevice(event.target.value)} className={device ? 'border-primary bg-paleBlue text-primary' : 'min-w-[160px] bg-sand'}><option value="">All devices</option>{(breakdowns?.devices || []).map((item: { name: string }) => <option key={item.name} value={item.name}>{channelLabel(item.name)}</option>)}</Select><Select value={campaignId} onChange={(event) => setCampaignId(event.target.value)} className="min-w-[170px] bg-sand"><option value="">All campaigns</option>{campaigns.map((campaign: any) => <option key={campaign.id} value={campaign.id}>{campaign.name}</option>)}</Select><Button variant="ghost" size="sm" onClick={reset}><RotateCcw className="h-3.5 w-3.5" />Reset</Button></Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-          <h2 className="text-sm font-bold text-navy-900 mb-4">Channels</h2>
-          <div className="h-48 w-full">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie data={breakdowns?.channels} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={2} dataKey="count">
-                  {breakdowns?.channels.map((_entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                </Pie>
-                <RechartsTooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-2"><Card className="bg-sand p-6"><p className="text-[11px] font-bold uppercase text-textMuted">Insight</p><h2 className="mt-4 text-lg font-extrabold">Your strongest signal is {selectedChannel}.</h2><p className="mt-3 text-sm leading-6 text-textMuted">Use this view to understand the channels and devices connected to real clicks.</p></Card><Card className="bg-paleOrange p-6"><p className="text-[11px] font-bold uppercase text-accent">Alert</p><h2 className="mt-4 text-lg font-extrabold">Keep your links governed.</h2><p className="mt-3 text-sm leading-6 text-ink/80">Expired and disabled links stay visible in the Links workspace so you can review them before sharing again.</p></Card></div>
 
-        <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-          <h2 className="text-sm font-bold text-navy-900 mb-4">Devices</h2>
-          <div className="h-48 w-full">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie data={breakdowns?.devices} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={2} dataKey="count">
-                  {breakdowns?.devices.map((_entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                </Pie>
-                <RechartsTooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]"><Card className="p-6 sm:p-7"><div className="flex items-start justify-between"><div><h2 className="text-lg font-extrabold">Traffic over time</h2><p className="mt-1 text-xs text-textMuted">Daily clicks · bot traffic excluded</p></div><span className="rounded-[10px] bg-sand px-4 py-3 text-xs font-bold">Compare: off</span></div>{seriesLoading ? <div className="flex h-64 items-center justify-center text-sm text-textMuted"><LoaderCircle className="mr-2 h-4 w-4 animate-spin" />Loading traffic…</div> : <TrafficChart data={timeseries || []} />}</Card><Card className="p-6 sm:p-7"><h2 className="text-lg font-extrabold">A world of connections</h2><p className="mt-1 text-xs text-textMuted">Clicks by country</p>{topCountry ? <div className="mt-7 space-y-5">{[...(geo?.countries || [])].sort((a: { count: number }, b: { count: number }) => b.count - a.count).slice(0, 4).map((item: { country: string; count: number }) => <div key={item.country}><div className="flex justify-between text-sm font-bold"><span>{item.country}</span><span className="text-primary">{percent(item.count, (geo?.countries || []).reduce((sum: number, value: { count: number }) => sum + value.count, 0))}</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sand"><div className="h-full rounded-full bg-primary" style={{ width: percent(item.count, (geo?.countries || []).reduce((sum: number, value: { count: number }) => sum + value.count, 0)) }} /></div></div>)}</div> : <p className="mt-7 text-sm text-textMuted">No country data has been recorded yet.</p>}</Card></div>
 
-        <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-          <h2 className="text-sm font-bold text-navy-900 mb-4">Browsers</h2>
-          <div className="h-48 w-full">
-            <ResponsiveContainer>
-              <BarChart data={breakdowns?.browsers} layout="vertical" margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#EDE9E3" />
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={100} tick={{ fill: '#5B6B7F', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <RechartsTooltip cursor={{fill: '#EDE9E3'}} />
-                <Bar dataKey="count" fill="#F26B0F" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]"><Card className="p-6 sm:p-7"><h2 className="text-lg font-extrabold">Your audience’s rhythm</h2><p className="mt-1 text-xs text-textMuted">Daily traffic in the selected period</p>{seriesLoading ? <div className="mt-8 text-sm text-textMuted">Loading rhythm…</div> : <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">{(timeseries || []).slice(-8).map((item: { date: string; clicks: number }) => <div key={item.date} className="rounded-xl bg-sand p-3"><p className="text-[11px] text-textMuted">{item.date.slice(5)}</p><p className="mt-3 text-lg font-extrabold text-primary">{item.clicks.toLocaleString('en-IN')}</p><p className="mt-1 text-[11px] text-textMuted">clicks</p></div>)}</div>}<p className="mt-6 text-sm font-semibold text-ink">Peak activity: the tallest bar in the selected range.</p></Card><Card className="p-6 sm:p-7"><h2 className="text-lg font-extrabold">Where clicks begin</h2><p className="mt-1 text-xs text-textMuted">Referrer channels</p>{breakdownsLoading ? <div className="mt-8 text-sm text-textMuted">Loading channels…</div> : <div className="mt-6 space-y-5">{(breakdowns?.channels || []).map((item: { name: string; count: number }, index: number) => <div key={item.name}><div className="flex justify-between text-sm"><span>{channelLabel(item.name)}</span><span className="font-bold">{percent(item.count, channelTotal)}</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sand"><div className={`h-full rounded-full ${index % 2 ? 'bg-success' : 'bg-primary'}`} style={{ width: percent(item.count, channelTotal) }} /></div></div>)}</div>}</Card></div>
 
-      <div className="bg-cream p-6 rounded-2xl border border-line shadow-sm">
-        <h2 className="text-lg font-display font-bold mb-4">Top Countries</h2>
-        <div className="space-y-3">
-          {geo?.countries.sort((a: any,b: any)=>b.count - a.count).slice(0, 5).map((c: any) => (
-             <div key={c.country} className="flex justify-between items-center">
-                <span className="text-sm font-medium">{c.country}</span>
-                <span className="text-sm text-textMuted">{c.count} clicks</span>
-             </div>
-          ))}
-          {geo?.countries.length === 0 && <div className="text-sm text-textMuted">No geo data recorded yet.</div>}
-        </div>
-      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-2"><Card className="p-6 sm:p-7"><h2 className="text-lg font-extrabold">On every screen</h2><p className="mt-1 text-xs text-textMuted">Clicks by device</p><div className="mt-6 space-y-5">{(breakdowns?.devices || []).map((item: { name: string; count: number }, index: number) => <div key={item.name}><div className="flex justify-between text-sm"><span>{channelLabel(item.name)}</span><span className="font-bold">{percent(item.count, deviceTotal)}</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sand"><div className={`h-full rounded-full ${index === 1 ? 'bg-accent' : 'bg-primary'}`} style={{ width: percent(item.count, deviceTotal) }} /></div></div>)}</div></Card><Card className="p-6 sm:p-7"><h2 className="text-lg font-extrabold">The links leading the way</h2><p className="mt-1 text-xs text-textMuted">Link-level ranking is available in the Links workspace.</p><button onClick={() => navigate('/links')} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-primary">Open links <ArrowRight className="h-4 w-4" /></button></Card></div>
+      <p className="mt-8 text-xs text-textMuted">Analytics reflect persisted human click events · Filters that are not supported by the current API remain visual selectors only.</p>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react';
 import { ArrowRight, Check, ChevronDown } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -29,8 +29,8 @@ export const Button = ({
   </button>
 );
 
-export const Card = ({ children, className, as: Tag = 'section' }: { children: ReactNode; className?: string; as?: 'section' | 'div' | 'article' }) => (
-  <Tag className={clsx('app-card', className)}>{children}</Tag>
+export const Card = ({ children, className, as: Tag = 'section', ...props }: { children: ReactNode; className?: string; as?: 'section' | 'div' | 'article' } & HTMLAttributes<HTMLElement>) => (
+  <Tag {...props} className={clsx('app-card', className)}>{children}</Tag>
 );
 
 export const Breadcrumb = ({ current }: { current: string }) => (
