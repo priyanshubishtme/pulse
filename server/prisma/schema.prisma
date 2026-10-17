@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum LinkStatus {
+  ACTIVE
+  DISABLED
+  EXPIRED
+}
+
+enum ClickSource {
+  LINK
+  QR
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  OTHER
+}
+
+enum CampaignCategory {
+  EMAIL
+  SOCIAL_MEDIA
+  PAID_ADS
+  SEO
+  PARTNERSHIPS
+  EVENTS
+  OTHER
+}
+
+enum Channel {
+  DIRECT
+  SOCIAL
+  SEARCH
+  EMAIL
+  OTHER_SITE
+}
+
+enum BlockReason {
+  DISABLED
+  EXPIRED
+  LIMIT_REACHED
+  WRONG_PASSWORD
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(USER)
+  timezone     String   @default("UTC")
+  createdAt    DateTime @default(now())
+  links        Link[]
+  campaigns    Campaign[]
+  tags         Tag[]
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  name        String
+  category    CampaignCategory
+  startsAt    DateTime?
+  endsAt      DateTime?
+  archivedAt  DateTime?
+  description String?
+  createdAt   DateTime @default(now())
+  links       Link[]
+  @@unique([ownerId, name])
+}
+
+model Tag {
+  id      String @id @default(cuid())
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+  name    String
+  links   LinkTag[]
+  @@unique([ownerId, name])
+}
+
+model Link {
+  id             String     @id @default(cuid())
+  ownerId        String
+  owner          User       @relation(fields: [ownerId], references: [id])
+  campaignId     String?
+  campaign       Campaign?  @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  alias          String     @unique
+  destinationUrl String
+  title          String?
+  status         LinkStatus @default(ACTIVE)
+  disabledReason String?
+  expiresAt      DateTime?
+  clickLimit     Int?
+  clickCount     Int        @default(0)
+  passwordHash   String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  tags           LinkTag[]
+  clicks         ClickEvent[]
+  blockedAttempts BlockedAttempt[]
+  @@index([ownerId, createdAt])
+  @@index([campaignId])
+}
+
+model LinkTag {
+  linkId String
+  tagId  String
+  link   Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([linkId, tagId])
+}
+
+model ClickEvent {
+  id          String      @id @default(cuid())
+  linkId      String
+  link        Link        @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  occurredAt  DateTime    @default(now())
+  source      ClickSource @default(LINK)
+  isBot       Boolean     @default(false)
+  visitorHash String
+  referrer    String?
+  channel     Channel     @default(DIRECT)
+  device      DeviceType
+  browser     String?
+  os          String?
+  country     String?
+  region      String?
+  city        String?
+  lat         Float?
+  lng         Float?
+  @@index([linkId, occurredAt])
+  @@index([occurredAt])
+  @@index([linkId, isBot, occurredAt])
+}
+
+model BlockedAttempt {
+  id          String      @id @default(cuid())
+  linkId      String
+  link        Link        @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  occurredAt  DateTime    @default(now())
+  reason      BlockReason
+  visitorHash String
+  country     String?
+  isBot       Boolean     @default(false)
+  @@index([linkId, occurredAt])
+  @@index([reason, occurredAt])
+}
+
+model BlockedDomain {
+  id        String   @id @default(cuid())
+  domain    String   @unique
+  reason    String?
+  createdAt DateTime @default(now())
+}
+
+model ImportBatch {
+  id        String   @id @default(cuid())
+  ownerId   String
+  createdAt DateTime @default(now())
+  added     Int
+  rejected  Int
+  duplicates Int
+  rows      ImportRow[]
+}
+
+model ImportRow {
+  id        String  @id @default(cuid())
+  batchId   String
+  batch     ImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  url       String
+  alias     String?
+  outcome   String
+}
