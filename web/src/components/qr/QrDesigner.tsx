@@ -21,7 +21,7 @@ export const QrDesigner = ({
   const qrCode = useRef<QRCodeStyling | undefined>(undefined);
 
   useEffect(() => {
-    qrCode.current = new QRCodeStyling({
+    const nextQrCode = new QRCodeStyling({
       width: size,
       height: size,
       data: url,
@@ -30,22 +30,12 @@ export const QrDesigner = ({
       cornersSquareOptions: { color, type: cornerStyle },
       backgroundOptions: { color: '#ffffff' },
     });
+    qrCode.current = nextQrCode;
 
     if (ref.current) {
       ref.current.innerHTML = '';
-      qrCode.current.append(ref.current);
+      nextQrCode.append(ref.current);
     }
-  }, []);
-
-  useEffect(() => {
-    if (!qrCode.current) return;
-    qrCode.current.update({
-      data: url,
-      width: size,
-      height: size,
-      dotsOptions: { color, type: pattern },
-      cornersSquareOptions: { color, type: cornerStyle }
-    });
   }, [url, pattern, cornerStyle, color, size]);
 
   return (
