@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { ChangeEvent } from 'react';
 import Papa from 'papaparse';
 import { apiClient } from '../../api/client';
 
 export const Import = () => {
-  const [file, setFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<any[]>([]);
   const [campaignId, setCampaignId] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
       Papa.parse(e.target.files[0], {
         header: true,
         skipEmptyLines: true,

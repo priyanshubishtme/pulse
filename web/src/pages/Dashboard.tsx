@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../api/client';
 import { TrafficChart } from '../components/charts/TrafficChart';
 
 export const Dashboard = () => {
-  const { user } = useAuth();
   const [range, setRange] = useState('30');
 
   const { data: kpis } = useQuery({

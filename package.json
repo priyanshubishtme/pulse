@@ -7,11 +7,15 @@
     "web"
   ],
   "scripts": {
-    "dev": "npm run dev --workspaces --if-present",
+    "dev": "concurrently -k -n server,web \"npm run dev --workspace=server\" \"npm run dev --workspace=web\"",
+    "prisma:generate": "prisma generate --schema server/prisma/schema.prisma",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
   },
   "dependencies": {
     "express-rate-limit": "^8.7.1"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
   }
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Shell } from './components/layout/Shell';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';

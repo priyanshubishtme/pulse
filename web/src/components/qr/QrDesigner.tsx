@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 
 interface QrDesignerProps {
@@ -18,7 +18,7 @@ export const QrDesigner = ({
   size = 300
 }: QrDesignerProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const qrCode = useRef<QRCodeStyling>();
+  const qrCode = useRef<QRCodeStyling | undefined>(undefined);
 
   useEffect(() => {
     qrCode.current = new QRCodeStyling({

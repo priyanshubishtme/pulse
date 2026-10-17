@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api/client';
 import { TrafficChart } from '../../components/charts/TrafficChart';
@@ -9,7 +9,6 @@ const COLORS = ['#0F5BE6', '#F26B0F', '#1E8E4E', '#E8A317', '#D93025', '#04213F'
 export const Analytics = () => {
   const [range, setRange] = useState('30');
 
-  const { data: kpis } = useQuery({ queryKey: ['analytics', 'overview', range], queryFn: async () => (await apiClient.get(`/analytics/overview?range=${range}`)).data });
   const { data: timeseries } = useQuery({ queryKey: ['analytics', 'timeseries', range], queryFn: async () => (await apiClient.get(`/analytics/timeseries?range=${range}`)).data.series });
   const { data: breakdowns } = useQuery({ queryKey: ['analytics', 'breakdowns', range], queryFn: async () => (await apiClient.get(`/analytics/breakdowns?range=${range}`)).data });
   const { data: geo } = useQuery({ queryKey: ['analytics', 'geo', range], queryFn: async () => (await apiClient.get(`/analytics/geo?range=${range}`)).data });
@@ -40,7 +39,7 @@ export const Analytics = () => {
             <ResponsiveContainer>
               <PieChart>
                 <Pie data={breakdowns?.channels} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={2} dataKey="count">
-                  {breakdowns?.channels.map((entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                  {breakdowns?.channels.map((_entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <RechartsTooltip />
               </PieChart>
@@ -54,7 +53,7 @@ export const Analytics = () => {
             <ResponsiveContainer>
               <PieChart>
                 <Pie data={breakdowns?.devices} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={2} dataKey="count">
-                  {breakdowns?.devices.map((entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                  {breakdowns?.devices.map((_entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <RechartsTooltip />
               </PieChart>

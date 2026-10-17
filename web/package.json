@@ -34,8 +34,11 @@
     "@types/react-dom": "^19.2.7",
     "@types/react-simple-maps": "^3.0.6",
     "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.6.1",
     "jsdom": "^29.1.1",
     "oxlint": "^1.81.0",
+    "postcss": "^8.5.30",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.5"

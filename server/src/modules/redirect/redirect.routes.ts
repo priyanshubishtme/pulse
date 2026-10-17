@@ -99,10 +99,10 @@ async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) 
 async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
   const alias = (req.params.alias as string).toLowerCase();
 
-  let link = linkCache.get(alias);
+  let link = linkCache.get(alias) ?? null;
   if (!link) {
     link = await prisma.link.findUnique({ where: { alias } });
-    linkCache.set(alias, link || null);
+    if (link) linkCache.set(alias, link);
   }
 
   let isDomainBlocked = false;
