@@ -1,0 +1,165 @@
+import { Router } from 'express';
+import prisma from '../../lib/prisma';
+import bcrypt from 'bcrypt';
+import isbot from 'isbot';
+import { linkCache } from './linkCache';
+import { effectiveStatus } from './ruleEngine';
+import { enqueueClick, enqueueBlock } from '../clicks/clickQueue';
+import { config } from '../../config';
+import rateLimit from 'express-rate-limit';
+
+const router = Router();
+
+const unlockLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many unlock attempts, please try again later.' } }
+});
+
+router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
+  const alias = (req.params.alias as string).toLowerCase();
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ error: { code: 'MISSING_PASSWORD', message: 'Password required' } });
+  }
+
+  const link = await prisma.link.findUnique({ where: { alias } });
+  if (!link || !link.passwordHash) {
+    return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Link not found or not protected' } });
+  }
+
+  const isValid = await bcrypt.compare(password, link.passwordHash);
+  if (!isValid) {
+    enqueueBlock({
+      linkId: link.id,
+      reason: 'WRONG_PASSWORD',
+      ip: req.ip || '0.0.0.0',
+      userAgent: req.headers['user-agent'] || '',
+    });
+    return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Incorrect password' } });
+  }
+
+  // Check rule engine again using the now unlocked status
+  let isDomainBlocked = false;
+  try {
+    const hostname = new URL(link.destinationUrl).hostname;
+    const blocklists = await prisma.blockedDomain.findMany();
+    isDomainBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
+  } catch {}
+
+  const decision = effectiveStatus(link, new Date(), true, isDomainBlocked);
+  
+  if (decision === 'EXPIRED' || decision === 'DISABLED' || decision === 'LIMIT_REACHED') {
+    enqueueBlock({
+      linkId: link.id,
+      reason: decision,
+      ip: req.ip || '0.0.0.0',
+      userAgent: req.headers['user-agent'] || '',
+    });
+    return res.status(403).json({ error: { code: decision, message: `Link is ${decision.toLowerCase()}` } });
+  }
+
+  try {
+    await processValidRedirect(link, 'LINK', req);
+    res.json({ destinationUrl: link.destinationUrl });
+  } catch (err: any) {
+    if (err.message === 'LIMIT_REACHED') {
+      res.status(403).json({ error: { code: 'LIMIT_REACHED', message: 'Limit reached concurrently' } });
+    } else {
+      res.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'Server error' } });
+    }
+  }
+});
+
+async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) {
+  const userAgent = req.headers['user-agent'] || '';
+  const bot = isbot(userAgent);
+  
+  // We only increment atomically here if it's a human. 
+  // Non-limited links are incremented in the batch queue.
+  if (link.clickLimit !== null && !bot) {
+    const res = await prisma.$executeRaw`
+      UPDATE "Link" SET "clickCount" = "clickCount" + 1 
+      WHERE id = ${link.id} AND "clickCount" < ${link.clickLimit}
+    `;
+    if (res === 0) {
+      throw new Error('LIMIT_REACHED');
+    }
+  }
+
+  enqueueClick({
+    linkId: link.id,
+    source,
+    ip: req.ip || '0.0.0.0',
+    userAgent,
+    referrer: req.headers.referer || (req.headers as any).referrer as string | undefined,
+    hasClickLimit: link.clickLimit !== null
+  });
+}
+
+async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
+  const alias = (req.params.alias as string).toLowerCase();
+  
+  let link = linkCache.get(alias);
+  if (!link) {
+    link = await prisma.link.findUnique({ where: { alias } });
+    linkCache.set(alias, link || null);
+  }
+
+  let isDomainBlocked = false;
+  if (link) {
+    try {
+      const hostname = new URL(link.destinationUrl).hostname;
+      const blocklists = await prisma.blockedDomain.findMany();
+      isDomainBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
+    } catch {}
+  }
+
+  const decision = effectiveStatus(link, new Date(), false, isDomainBlocked);
+
+  if (decision === 'NOT_FOUND') {
+    return res.redirect(302, `${config.appUrl}/status/not-found`);
+  }
+
+  if (decision === 'EXPIRED' && link && link.status !== 'EXPIRED') {
+    await prisma.link.update({ where: { id: link.id }, data: { status: 'EXPIRED' } });
+    link.status = 'EXPIRED';
+    linkCache.set(alias, link);
+  }
+
+  if (decision === 'EXPIRED' || decision === 'DISABLED' || decision === 'LIMIT_REACHED') {
+    enqueueBlock({
+      linkId: link!.id,
+      reason: decision,
+      ip: req.ip || '0.0.0.0',
+      userAgent: req.headers['user-agent'] || '',
+    });
+    const reasonUrl = decision.toLowerCase().replace('_', '-');
+    return res.redirect(302, `${config.appUrl}/status/${reasonUrl}`);
+  }
+
+  if (decision === 'PASSWORD_REQUIRED') {
+    return res.redirect(302, `${config.appUrl}/unlock/${alias}`);
+  }
+
+  try {
+    await processValidRedirect(link, source, req);
+    return res.redirect(302, link!.destinationUrl);
+  } catch (err: any) {
+    if (err.message === 'LIMIT_REACHED') {
+      return res.redirect(302, `${config.appUrl}/status/limit-reached`);
+    }
+    return res.status(500).send('Internal Server Error');
+  }
+}
+
+router.get('/qr/:alias', (req, res) => redirectHandler(req, res, 'QR'));
+router.get('/:alias', (req, res, next) => {
+  if (req.params.alias === 'api' || req.params.alias === 'health') {
+    return next();
+  }
+  redirectHandler(req, res, 'LINK');
+});
+
+export default router;

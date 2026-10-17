@@ -1,0 +1,43 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.104.3",
+    "axios": "^1.20.0",
+    "clsx": "^2.1.1",
+    "i18n-iso-countries": "^7.14.0",
+    "lucide-react": "^1.58.0",
+    "papaparse": "^5.7.0",
+    "qr-code-styling": "^1.9.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "react-simple-maps": "^5.0.5",
+    "recharts": "^3.10.1",
+    "tailwind-merge": "^3.7.0",
+    "world-atlas": "^2.0.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.13.3",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@types/react-simple-maps": "^3.0.6",
+    "@vitejs/plugin-react": "^6.1.1",
+    "jsdom": "^29.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.5"
+  }
+}
