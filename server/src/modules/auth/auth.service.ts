@@ -15,19 +15,21 @@ const DEFAULT_TAGS = [
 ];
 
 export const signupSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().trim().toLowerCase().email('Invalid email address'),
+  name: z.string().trim().min(2, 'Name must be at least 2 characters'),
   password: z.string().min(6, 'Password must be at least 6 characters').max(72),
   timezone: z.string().default('UTC')
 });
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().trim().toLowerCase().email(),
   password: z.string()
 });
 
 export async function signup(data: z.infer<typeof signupSchema>) {
-  const existingUser = await prisma.user.findUnique({ where: { email: data.email } });
+  // Case-insensitive lookup also prevents creating a second account for an
+  // address that was stored with different capitalization by an older build.
+  const existingUser = await prisma.user.findFirst({ where: { email: { equals: data.email, mode: 'insensitive' } } });
   if (existingUser) {
     throw { status: 409, code: 'EMAIL_IN_USE', message: 'Email is already registered' };
   }
@@ -51,7 +53,9 @@ export async function signup(data: z.infer<typeof signupSchema>) {
 }
 
 export async function login(data: z.infer<typeof loginSchema>) {
-  const user = await prisma.user.findUnique({ where: { email: data.email } });
+  // Match legacy records case-insensitively while all new records are stored
+  // in normalized lowercase form.
+  const user = await prisma.user.findFirst({ where: { email: { equals: data.email, mode: 'insensitive' } } });
   if (!user) {
     throw { status: 401, code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' };
   }

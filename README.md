@@ -118,7 +118,7 @@ Prerequisites: Node.js 22.12 or newer, npm, and PostgreSQL 15+ (or Docker Deskto
 
    Or run a local PostgreSQL instance and make sure its credentials match `DATABASE_URL`.
 
-3. Copy `.env.example` to `.env` and configure the values. At minimum, set `DATABASE_URL`, `JWT_SECRET`, and `SERVER_SALT`. Keep secrets private. Update `APP_URL` and `PUBLIC_BASE_URL` if the frontend uses a different local port.
+3. Copy `.env.example` to `.env` and configure the values. At minimum, set `DATABASE_URL`, `JWT_SECRET`, `SERVER_SALT`, `APP_URL`, and `VITE_PUBLIC_BASE_URL`. Keep secrets private. `APP_URL` is the frontend origin; `VITE_PUBLIC_BASE_URL` is the public redirect origin. In local development these default to `http://localhost:5174` and `http://localhost:3000`, respectively. If you change either port or use a deployed short domain, update the matching values and restart/rebuild the relevant workspace.
 
 4. Generate Prisma Client and apply the database migrations from the repository root:
 
@@ -138,7 +138,7 @@ Prerequisites: Node.js 22.12 or newer, npm, and PostgreSQL 15+ (or Docker Deskto
    npm run dev
    ```
 
-   The API defaults to `http://localhost:3000`; Vite defaults to `http://localhost:5173` (and may choose the next free port if occupied). Ensure the backend CORS/app URL settings match the frontend port.
+   The API and short-link routes run at `http://localhost:3000`; the LinkPulse UI runs at `http://localhost:5174`. Vite uses a strict port so it reports a conflict instead of silently moving and breaking the redirect/status origin. Copied short URLs and generated QR codes use the configured public redirect origin, not the UI origin.
 
 The seed script creates sample users, links, campaigns, tags, and historical click events. For seeded login details, see [`docs/PROGRESS.md`](docs/PROGRESS.md) and `server/prisma/seed.ts`; change development credentials before exposing a deployment. To regenerate/reset local data, use the Prisma commands intentionally and understand that database reset operations remove existing local data.
 
@@ -170,6 +170,12 @@ This roadmap is reconstructed from the repository's documentation and the commit
 | Merge to main | Combined the completed `feat-linkpulse-core` work with `main`. | `1842263` |
 
 The detailed phase log is in [`docs/PROGRESS.md`](docs/PROGRESS.md); design references are in [`docs/design/`](docs/design/).
+
+## Redirect behavior and verification
+
+Read [`redirection.md`](redirection.md) for the redirect decision sequence, status and unlock behavior, local-port configuration, click-event enrichment, analytics recording, known runtime limits, and the proposed future Pulse Safety Record. The schema and initial migration have been validated against the local PostgreSQL database. Clicks are stored in `ClickEvent` and blocked visits in `BlockedAttempt`; a separate safety/audit record is not implemented.
+
+Analytics currently groups daily time-series data in UTC. The saved account timezone is not yet applied to those buckets. Click and blocked-attempt buffers are in memory and may be lost if the process exits or a database write fails before they flush.
 
 ## Figma UI redesign brief
 

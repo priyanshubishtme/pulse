@@ -43,15 +43,9 @@ export const Shell = () => {
           <Link to="/import" className={navLinkClass('/import')}><Upload className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" /><span>Import CSV</span></Link>
           {user?.role === 'ADMIN' && <Link to="/admin" className={clsx(navLinkClass('/admin'), 'mt-5 border border-accent/30 text-accent')}>Admin</Link>}
         </nav>
-        <div className="mb-7 rounded-2xl border border-slate-500/70 p-4">
-          <p className="text-[10px] font-bold uppercase text-slate-300">Zen Studio</p>
-          <p className="mt-2 text-sm font-bold">Pro workspace</p>
-          <div className="mt-4 h-1 overflow-hidden rounded-full bg-slate-500/80"><div className="h-full w-1/2 rounded-full bg-accent" /></div>
-          <p className="mt-2 text-[11px] text-slate-300">24 of 50 active links</p>
-        </div>
         <div className="flex items-center gap-3 px-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cream text-xs font-bold text-ink">{user?.name?.slice(0, 2).toUpperCase() || 'LP'}</div>
-          <div className="min-w-0"><p className="truncate text-xs font-bold">{user?.name || 'Workspace owner'}</p><p className="text-[11px] text-slate-300">Workspace owner</p></div>
+          <div className="min-w-0"><p className="truncate text-xs font-bold">{user?.name || 'LinkPulse member'}</p><p className="text-[11px] text-slate-300">{user?.role === 'ADMIN' ? 'Administrator' : 'Workspace member'}</p></div>
         </div>
         <button onClick={handleLogout} className="mt-5 flex items-center gap-3 px-3 text-xs font-semibold text-slate-300 hover:text-cream"><LogOut className="h-4 w-4" aria-hidden="true" /> Log out</button>
       </aside>

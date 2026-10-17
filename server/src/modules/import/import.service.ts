@@ -3,8 +3,15 @@ import { validateDestination } from '../links/urlValidator';
 import { checkAlias, generateAlias } from '../links/aliasService';
 
 export async function processImportBatch(rows: any[], ownerId: string, campaignId?: string) {
-  if (!rows || rows.length === 0) throw { status: 400, message: 'No data rows found' };
+  if (!Array.isArray(rows) || rows.length === 0) throw { status: 400, message: 'No data rows found' };
   if (rows.length > 1000) throw { status: 400, message: 'Max 1000 rows allowed per batch' };
+
+  if (campaignId) {
+    const campaign = await prisma.campaign.findUnique({ where: { id: campaignId } });
+    if (!campaign || campaign.ownerId !== ownerId || campaign.archivedAt) {
+      throw { status: 400, code: 'INVALID_CAMPAIGN', message: 'Campaign does not exist, belong to you, or is archived' };
+    }
+  }
 
   let added = 0;
   let rejected = 0;

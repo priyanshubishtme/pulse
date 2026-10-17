@@ -18,7 +18,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(helmet());
-app.use(cors({ origin: config.publicBaseUrl, credentials: true }));
+app.use(cors({ origin: config.appUrl, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
 app.use(morgan('dev'));

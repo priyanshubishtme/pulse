@@ -9,8 +9,7 @@ export const config = {
   port: process.env.PORT || 3000,
   jwtSecret: process.env.JWT_SECRET || (isProd ? '' : 'supersecretjwtkey'),
   serverSalt: process.env.SERVER_SALT || (isProd ? '' : 'randomsalt'),
-  publicBaseUrl: process.env.PUBLIC_BASE_URL || 'http://localhost:5173',
-  appUrl: process.env.APP_URL || 'http://localhost:5173',
+  appUrl: process.env.APP_URL || 'http://localhost:5174',
   isProd
 };
 

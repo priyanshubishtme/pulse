@@ -44,6 +44,17 @@ function deriveChannel(referrer: string | undefined): 'DIRECT' | 'SOCIAL' | 'SEA
   }
 }
 
+function safeReferrerHost(referrer: string | undefined): string | null {
+  if (!referrer) return null;
+  try {
+    return new URL(referrer).hostname.toLowerCase();
+  } catch {
+    // Referrer headers are visitor supplied. A malformed value must not turn a
+    // successful short-link redirect into a 500 response.
+    return null;
+  }
+}
+
 function deriveDevice(type: string | undefined): 'DESKTOP' | 'MOBILE' | 'TABLET' | 'OTHER' {
   if (type === 'mobile') return 'MOBILE';
   if (type === 'tablet') return 'TABLET';
@@ -67,7 +78,7 @@ function enrichClick(input: ClickEventInput) {
     source: input.source,
     isBot: bot,
     visitorHash: hashVisitor(input.ip, input.userAgent),
-    referrer: input.referrer ? new URL(input.referrer).hostname : null,
+    referrer: safeReferrerHost(input.referrer),
     channel: deriveChannel(input.referrer),
     device: deriveDevice(result.device.type),
     browser: result.browser.name || null,

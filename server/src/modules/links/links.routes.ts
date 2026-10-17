@@ -5,8 +5,21 @@ import { checkAlias, generateAlias } from './aliasService';
 import { createLinkLimiter } from '../../middleware/rateLimit';
 import prisma from '../../lib/prisma';
 import { linkCache } from '../redirect/linkCache';
+import bcrypt from 'bcrypt';
+import { z } from 'zod';
+import { validateDestination } from './urlValidator';
 
 const router = Router();
+
+const linkUpdateSchema = z.object({
+  destinationUrl: z.string().url().optional(),
+  title: z.string().max(120).nullable().optional(),
+  expiresAt: z.string().datetime().nullable().optional(),
+  clickLimit: z.number().int().min(0).max(1000000000).nullable().optional(),
+  password: z.string().min(6).max(72).nullable().optional(),
+  campaignId: z.string().nullable().optional(),
+  tagIds: z.array(z.string()).max(10).optional(),
+}).strict().refine(data => Object.keys(data).length > 0, { message: 'Provide at least one field to update' });
 
 router.get('/check-alias', requireAuth, async (req, res, next) => {
   try {
@@ -100,11 +113,52 @@ router.patch('/:id', requireAuth, async (req: AuthRequest, res, next) => {
       return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Link not found' } });
     }
 
+    const input = linkUpdateSchema.parse(req.body);
+
+    if (input.destinationUrl) {
+      const issues = await validateDestination(input.destinationUrl, req.user!.id);
+      const errors = issues.filter(issue => issue.level === 'error');
+      if (errors.length) return res.status(400).json({ error: { code: 'VALIDATION_FAILED', message: errors[0].message, issues: errors } });
+    }
+
+    if (input.campaignId) {
+      const campaign = await prisma.campaign.findUnique({ where: { id: input.campaignId } });
+      if (!campaign || campaign.ownerId !== req.user!.id || campaign.archivedAt) {
+        return res.status(400).json({ error: { code: 'INVALID_CAMPAIGN', message: 'Campaign does not exist, belong to you, or is archived' } });
+      }
+    }
+
+    const requestedTagIds = input.tagIds === undefined ? undefined : [...new Set(input.tagIds)];
+    if (requestedTagIds) {
+      const tags = await prisma.tag.findMany({ where: { id: { in: requestedTagIds }, ownerId: req.user!.id } });
+      if (tags.length !== requestedTagIds.length) {
+        return res.status(400).json({ error: { code: 'INVALID_TAGS', message: 'One or more tags do not belong to you' } });
+      }
+    }
+
+    const data: any = {};
+    if (input.destinationUrl !== undefined) data.destinationUrl = input.destinationUrl;
+    if (input.title !== undefined) data.title = input.title;
+    if (input.expiresAt !== undefined) data.expiresAt = input.expiresAt ? new Date(input.expiresAt) : null;
+    if (input.clickLimit !== undefined) data.clickLimit = input.clickLimit === 0 ? null : input.clickLimit;
+    if (input.campaignId !== undefined) data.campaignId = input.campaignId;
+    if (input.password !== undefined) data.passwordHash = input.password ? await bcrypt.hash(input.password, 10) : null;
+
     const updated = await prisma.link.update({
       where: { id },
-      data: req.body
+      data
     });
 
+    if (requestedTagIds !== undefined) {
+      await prisma.$transaction(async transaction => {
+        await transaction.linkTag.deleteMany({ where: { linkId: id } });
+        if (requestedTagIds.length) {
+          await transaction.linkTag.createMany({ data: requestedTagIds.map(tagId => ({ linkId: id, tagId })) });
+        }
+      });
+    }
+
+    linkCache.delete(link.alias);
     linkCache.delete(updated.alias);
     res.json({ link: updated });
   } catch (err) {
