@@ -14,6 +14,7 @@ import { Import } from './pages/Import/Import';
 import { AdminOverview } from './pages/admin/AdminOverview';
 import { StatusPage } from './pages/Public/StatusPage';
 import { UnlockPage } from './pages/Public/UnlockPage';
+import { ContinuePage } from './pages/Public/ContinuePage';
 
 export const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/status/:reason" element={<StatusPage />} />
       <Route path="/unlock/:alias" element={<UnlockPage />} />
+      <Route path="/continue/:alias" element={<ContinuePage />} />
 
       <Route element={<ProtectedRoute allowedRoles={['USER', 'ADMIN']} />}>
         <Route element={<Shell />}>

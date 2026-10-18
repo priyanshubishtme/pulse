@@ -10,10 +10,11 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || (isProd ? '' : 'supersecretjwtkey'),
   serverSalt: process.env.SERVER_SALT || (isProd ? '' : 'randomsalt'),
   appUrl: process.env.APP_URL || 'http://localhost:5174',
+  redisUrl: process.env.REDIS_URL || '',
   isProd
 };
 
-if (isProd && (!config.jwtSecret || !config.serverSalt)) {
-  console.error("Missing required secure environment variables in production");
+if (isProd && (!config.jwtSecret || !config.serverSalt || !config.redisUrl)) {
+  console.error("Missing required production environment variables: JWT_SECRET, SERVER_SALT, and REDIS_URL are required");
   process.exit(1);
 }

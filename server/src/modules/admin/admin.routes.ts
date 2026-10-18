@@ -43,7 +43,7 @@ router.post('/links/:id/disable', async (req, res, next) => {
       data: { status: 'DISABLED', disabledReason: reason || 'Admin action' }
     });
 
-    linkCache.delete(link.alias);
+    await linkCache.delete(link.alias);
     res.json({ success: true, link });
   } catch (err) {
     next(err);

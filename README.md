@@ -6,7 +6,7 @@ LinkPulse is a URL shortener and link operations dashboard. It combines governed
 
 - **Accounts and roles:** Signup/login, logout, current-user session, HTTP-only JWT cookie, and role-protected administration.
 - **Link management:** Create, validate, list, edit, delete, and organize short links. Aliases are checked for availability; links can have a title, campaign, tags, expiry, click limit, and password.
-- **Redirect governance:** Public `/:alias` and `/qr/:alias` redirects evaluate link status, expiry, click limit, password, and destination blocklist. QR-origin visits are marked separately. Blocked visits can be recorded with a reason.
+- **Redirect governance:** Public `/:alias` and `/qr/:alias` requests evaluate link status, expiry, click limit, password, and destination blocklist. Valid visits go through a branded three-second continue page with an immediate action; QR-origin visits are marked separately. Blocked visits can be recorded with a reason.
 - **Campaigns and tags:** Create and manage campaigns and personal tags, archive campaigns, assign links, and bulk-move or bulk-tag selected links.
 - **Analytics:** Overview KPIs, zero-filled time series, device/channel/browser breakdowns, geographic summaries, and smart alerts. Bot events are excluded from human traffic KPIs.
 - **QR designer:** Generate and customize QR codes in the browser and download PNG/SVG without sending destination data to an external QR service.
@@ -23,23 +23,28 @@ LinkPulse is a URL shortener and link operations dashboard. It combines governed
 | Charts and UI | Recharts, Lucide React, `qr-code-styling`, Papa Parse |
 | Backend | Express 5, TypeScript, Zod |
 | Database | PostgreSQL 15+ with Prisma 5 |
-| Redirect and event enrichment | `lru-cache`, `isbot`, `ua-parser-js`, `geoip-lite` |
+| Cache and analytics queue | Redis 7 (shared cache and Streams); `lru-cache` fallback when Redis is not configured |
+| Redirect and event enrichment | `isbot`, `ua-parser-js`, `geoip-lite` |
 | Authentication | bcrypt password hashes and JWT in an HTTP-only cookie |
 
 ## Architecture
 
-LinkPulse is a **modular monolith**: one Express API and one React web app share a PostgreSQL database. Backend domains are separated into modules under `server/src/modules/` (auth, links, campaigns, tags, redirect, clicks, analytics, import, and admin). Prisma schema and migrations live in `server/prisma/`.
+LinkPulse is a **modular monolith**: one Express API and one React web app use PostgreSQL, with Redis providing shared redirect caching and durable analytics event delivery in production. Backend domains are separated into modules under `server/src/modules/` (auth, links, campaigns, tags, redirect, clicks, analytics, import, and admin). Prisma schema and migrations live in `server/prisma/`.
 
 ```mermaid
 flowchart LR
     Browser[React web app] -->|JSON API / auth cookie| API[Express API]
     Visitor[Link visitor] -->|GET /:alias or /qr/:alias| Redirect[Redirect rules]
     API --> DB[(PostgreSQL via Prisma)]
-    Redirect --> Cache[In-process LRU link cache]
+    Redirect --> Cache[Redis shared link cache]
     Cache --> Redirect
-    Redirect -->|allowed redirect| Visitor
-    Redirect --> Queue[In-memory click queue]
-    Queue -->|periodic / batch flush| DB
+    Redirect -->|valid visit| Interstitial[3-second continue page]
+    Interstitial -->|continue or timer| Visitor
+    Redirect --> Stream[Redis Stream]
+    Stream --> Worker[Analytics consumer group]
+    Worker --> DB
+    Redirect -. Redis not configured .-> Local[In-process cache and queue]
+    Local -. best-effort persist .-> DB
     Admin[Admin user] --> API
 ```
 
@@ -47,11 +52,11 @@ flowchart LR
 
 **Authenticated product request:** the browser calls the API through the shared Axios client. Authentication middleware verifies the HTTP-only JWT cookie; role middleware protects admin routes. Route modules validate inputs (Zod where applicable), scope user data to the owner, call domain services/Prisma, and return JSON. React Router protects authenticated pages and TanStack Query manages server state.
 
-**Short-link redirect:** a visitor requests `/:alias` or `/qr/:alias`. The redirect module looks up link data through the in-process LRU cache and evaluates the centralized rule engine: link existence, status, expiry, click limit, password gate, and blocked destination domain. A valid link receives an HTTP redirect. Visit metadata is enriched with bot classification, user-agent device/browser/OS, referrer/channel, and available geo-IP information, then submitted to an in-memory queue for batched persistence. Click-limit accounting is updated atomically and bots do not increment the human click count.
+**Short-link redirect:** a visitor requests `/:alias` or `/qr/:alias`. The redirect module checks the shared Redis cache (30-second TTL) and evaluates the centralized rule engine: link existence, status, expiry, click limit, password gate, and blocked destination domain. Valid visits go to a branded three-second interstitial with an immediate continue action. Visit metadata is enriched with bot classification, user-agent device/browser/OS, referrer/channel, and available geo-IP information, then appended to a Redis Stream. A consumer group writes each event and its unlimited-link click counter in one idempotent Prisma transaction; click-limit accounting is updated atomically on admission and bots do not increment the human click count. When Redis is not configured in local development, LinkPulse uses an in-process LRU cache and best-effort event queue.
 
 **Analytics:** analytics queries read persisted `ClickEvent` data, exclude bots from human KPIs, and return overview, time series, breakdown, geo, and alert results to the frontend charts and cards.
 
-**Operational note:** the redirect event queue and link cache are process-local memory. They are not shared across multiple server instances; queued events can be lost if the process exits before a flush. A durable/shared queue or cache is not part of the current implementation.
+**Operational note:** production requires Redis. It shares short-link cache entries across API instances and keeps analytics events in a Redis Stream until PostgreSQL persistence succeeds. Local development can omit Redis and use the best-effort in-memory fallback. Redis AOF and the Compose volume persist local stream data; a managed production Redis service still needs persistence and backup settings appropriate to its plan.
 
 ## Backend data model
 
@@ -86,7 +91,7 @@ All application API endpoints are prefixed with `/api`, except public redirects 
 | Analytics | `GET /analytics/overview`, `/timeseries`, `/breakdowns`, `/geo`, `/alerts` |
 | Import | `POST /import/commit` |
 | Admin | `GET /admin/overview`, `GET /admin/links`, `POST /admin/links/:id/disable`, `POST /admin/blocklist` |
-| Public | `POST /public/unlock/:alias`, `GET /:alias`, `GET /qr/:alias` |
+| Public | `POST /public/unlock/:alias`, `GET /public/resolve/:alias`, `GET /:alias`, `GET /qr/:alias` |
 
 See [`docs/final/API.md`](docs/final/API.md) for the route list and [`docs/final/`](docs/final/) for algorithms, query behavior, performance notes, and requirements.
 
@@ -102,7 +107,17 @@ FIGMA_UI_AGENT_PROMPT.md  Ready-to-use frontend redesign brief with Figma refere
 
 ## Setup and local development
 
-Prerequisites: Node.js 22.12 or newer, npm, and PostgreSQL 15+ (or Docker Desktop for the included Compose service).
+Prerequisites: Node.js 22.12 or newer, npm, PostgreSQL 15+, and Redis 7+ (or Docker Desktop for the included Compose services). Redis is optional for local development but required in production.
+
+### Windows and Docker Desktop first setup
+
+Docker Desktop's Linux container engine on Windows requires WSL 2 and the Virtual Machine Platform Windows feature. First-time WSL setup needs an administrator PowerShell and a Windows restart:
+
+```powershell
+wsl --install --no-distribution
+```
+
+After restarting, open Docker Desktop and wait for its engine to become ready. In Docker Desktop, enable **Settings > General > Start Docker Desktop when you sign in**. The Redis service uses `restart: unless-stopped`, so a Redis container created with Compose starts again when Docker Desktop's engine starts after a later sign-in. The first setup still needs the `docker compose up -d redis` command below.
 
 1. Install dependencies from the repository root:
 
@@ -110,15 +125,24 @@ Prerequisites: Node.js 22.12 or newer, npm, and PostgreSQL 15+ (or Docker Deskto
    npm install
    ```
 
-2. Start PostgreSQL. With Docker:
+2. Start Redis with Docker (this starts only Redis, so it can use your existing local PostgreSQL on port 5432):
 
    ```bash
-   docker compose up -d
+   docker compose up -d redis
    ```
 
-   Or run a local PostgreSQL instance and make sure its credentials match `DATABASE_URL`.
+   Or run Redis locally and make sure its URL matches `REDIS_URL`. PostgreSQL can be your existing local instance; its credentials must match `DATABASE_URL`.
 
-3. Copy `.env.example` to `.env` and configure the values. At minimum, set `DATABASE_URL`, `JWT_SECRET`, `SERVER_SALT`, `APP_URL`, and `VITE_PUBLIC_BASE_URL`. Keep secrets private. `APP_URL` is the frontend origin; `VITE_PUBLIC_BASE_URL` is the public redirect origin. In local development these default to `http://localhost:5174` and `http://localhost:3000`, respectively. If you change either port or use a deployed short domain, update the matching values and restart/rebuild the relevant workspace.
+3. If `.env` does not exist, copy `.env.example` to `.env`; otherwise preserve your current `.env` and add or update `REDIS_URL=redis://localhost:6379`. Set `DATABASE_URL`, `JWT_SECRET`, `SERVER_SALT`, `APP_URL`, and `VITE_PUBLIC_BASE_URL` to match your environment. Keep secrets private. `APP_URL` is the frontend origin; `VITE_PUBLIC_BASE_URL` is the public redirect origin. In local development these default to `http://localhost:5174` and `http://localhost:3000`. If you change ports or use deployed domains, update the matching values and restart/rebuild the relevant workspace.
+
+   Confirm the Redis container and its health before starting the API:
+
+   ```bash
+   docker compose ps redis
+   docker compose exec redis redis-cli ping
+   ```
+
+   The second command should print `PONG`. After the API starts, its log should include `Redis analytics stream ready`.
 
 4. Generate Prisma Client and apply the database migrations from the repository root:
 
@@ -173,9 +197,9 @@ The detailed phase log is in [`docs/PROGRESS.md`](docs/PROGRESS.md); design refe
 
 ## Redirect behavior and verification
 
-Read [`redirection.md`](redirection.md) for the redirect decision sequence, status and unlock behavior, local-port configuration, click-event enrichment, analytics recording, known runtime limits, and the proposed future Pulse Safety Record. The schema and initial migration have been validated against the local PostgreSQL database. Clicks are stored in `ClickEvent` and blocked visits in `BlockedAttempt`; a separate safety/audit record is not implemented.
+Read [`redirection.md`](redirection.md) for the redirect decision sequence, status and unlock behavior, local-port configuration, click-event enrichment, analytics recording, known runtime limits, and the proposed future Pulse Safety Record. Clicks are stored in `ClickEvent` and blocked visits in `BlockedAttempt`; a separate safety/audit record is not implemented.
 
-Analytics currently groups daily time-series data in UTC. The saved account timezone is not yet applied to those buckets. Click and blocked-attempt buffers are in memory and may be lost if the process exits or a database write fails before they flush.
+Analytics currently groups daily time-series data in UTC. The saved account timezone is not yet applied to those buckets. With Redis connected, production click and blocked-attempt events are stored in a Redis Stream until a consumer persists them to PostgreSQL; local fallback buffering remains in process memory when Redis is not configured or temporarily unavailable. The actual Redis container startup on this Windows machine is pending the WSL-enabling restart.
 
 ## Figma UI redesign brief
 

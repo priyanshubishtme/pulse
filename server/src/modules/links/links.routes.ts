@@ -158,8 +158,8 @@ router.patch('/:id', requireAuth, async (req: AuthRequest, res, next) => {
       });
     }
 
-    linkCache.delete(link.alias);
-    linkCache.delete(updated.alias);
+    await linkCache.delete(link.alias);
+    await linkCache.delete(updated.alias);
     res.json({ link: updated });
   } catch (err) {
     next(err);
@@ -175,7 +175,7 @@ router.delete('/:id', requireAuth, async (req: AuthRequest, res, next) => {
     }
 
     await prisma.link.delete({ where: { id } });
-    linkCache.delete(link.alias);
+    await linkCache.delete(link.alias);
 
     res.status(204).send();
   } catch (err) {

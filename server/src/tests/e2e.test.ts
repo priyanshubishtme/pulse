@@ -3,6 +3,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import app from '../app';
 import prisma from '../lib/prisma';
 import bcrypt from 'bcrypt';
+import { config } from '../config';
 
 describe('End to End Flow', () => {
   let token = '';
@@ -47,7 +48,7 @@ describe('End to End Flow', () => {
   it('Redirects correctly', async () => {
     const res = await request(app).get(`/${alias}`);
     expect(res.status).toBe(302);
-    expect(res.header.location).toBe('https://example.com/e2e');
+    expect(res.header.location).toBe(`${config.appUrl}/continue/${alias}?source=link`);
   });
 
   it('Respects admin disable', async () => {

@@ -31,7 +31,7 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
 
   const isValid = await bcrypt.compare(password, link.passwordHash);
   if (!isValid) {
-    enqueueBlock({
+    await enqueueBlock({
       linkId: link.id,
       reason: 'WRONG_PASSWORD',
       ip: req.ip || '0.0.0.0',
@@ -51,7 +51,7 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
   const decision = effectiveStatus(link, new Date(), true, isDomainBlocked);
 
   if (decision === 'EXPIRED' || decision === 'DISABLED' || decision === 'LIMIT_REACHED') {
-    enqueueBlock({
+    await enqueueBlock({
       linkId: link.id,
       reason: decision,
       ip: req.ip || '0.0.0.0',
@@ -72,6 +72,32 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
   }
 });
 
+// The interstitial uses this read-only endpoint to resolve an already approved
+// short-link visit. It deliberately does not enqueue another click event.
+router.get('/api/public/resolve/:alias', async (req, res) => {
+  const alias = (req.params.alias as string).toLowerCase();
+  const link = await prisma.link.findUnique({ where: { alias } });
+  if (!link) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Link not found' } });
+
+  let isDomainBlocked = false;
+  try {
+    const hostname = new URL(link.destinationUrl).hostname;
+    const blocklists = await prisma.blockedDomain.findMany();
+    isDomainBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
+  } catch {}
+
+  // The short-link request already reserved/consumed this visit before sending
+  // the browser to the interstitial. Do not reject that same visit because it
+  // just became the final allowed click.
+  const decision = effectiveStatus({ ...link, clickLimit: null }, new Date(), false, isDomainBlocked);
+  if (decision !== 'REDIRECT') {
+    return res.status(decision === 'PASSWORD_REQUIRED' ? 423 : decision === 'NOT_FOUND' ? 404 : 403)
+      .json({ error: { code: decision, message: `Link is ${decision.toLowerCase()}` } });
+  }
+
+  return res.json({ destinationUrl: link.destinationUrl });
+});
+
 async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) {
   const userAgent = req.headers['user-agent'] || '';
   const bot = isbot(userAgent);
@@ -86,7 +112,7 @@ async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) 
     }
   }
 
-  enqueueClick({
+  await enqueueClick({
     linkId: link.id,
     source,
     ip: req.ip || '0.0.0.0',
@@ -99,10 +125,10 @@ async function processValidRedirect(link: any, source: 'LINK' | 'QR', req: any) 
 async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
   const alias = (req.params.alias as string).toLowerCase();
 
-  let link = linkCache.get(alias) ?? null;
+  let link = await linkCache.get(alias);
   if (!link) {
     link = await prisma.link.findUnique({ where: { alias } });
-    if (link) linkCache.set(alias, link);
+    if (link) await linkCache.set(alias, link);
   }
 
   let isDomainBlocked = false;
@@ -123,11 +149,11 @@ async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
   if (decision === 'EXPIRED' && link && link.status !== 'EXPIRED') {
     await prisma.link.update({ where: { id: link.id }, data: { status: 'EXPIRED' } });
     link.status = 'EXPIRED';
-    linkCache.set(alias, link);
+    await linkCache.set(alias, link);
   }
 
   if (decision === 'EXPIRED' || decision === 'DISABLED' || decision === 'LIMIT_REACHED') {
-    enqueueBlock({
+    await enqueueBlock({
       linkId: link!.id,
       reason: decision,
       ip: req.ip || '0.0.0.0',
@@ -143,7 +169,9 @@ async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
 
   try {
     await processValidRedirect(link, source, req);
-    return res.redirect(302, link!.destinationUrl);
+    const continueUrl = new URL(`/continue/${encodeURIComponent(alias)}`, config.appUrl);
+    continueUrl.searchParams.set('source', source.toLowerCase());
+    return res.redirect(302, continueUrl.toString());
   } catch (err: any) {
     console.error('Redirect Error:', err);
     if (err.message === 'LIMIT_REACHED') {

@@ -11,14 +11,24 @@ This document describes the redirect path implemented in the current code. The s
 
 There were two separate origin mismatches. First, Vite had been allowed to move from `5173` to `5174` while Express still sent status/unlock visitors to `APP_URL` on `5173`. Second, the UI copied short links using its own `window.location.origin`, which points to the Vite app; short-link routes are served by Express. LinkPulse now fixes the UI at `5174` (`strictPort`), uses `APP_URL=http://localhost:5174` for status/unlock pages, and builds copied links and QR payloads from `VITE_PUBLIC_BASE_URL=http://localhost:3000`. If you change the ports or deploy behind a custom short domain, update `APP_URL` and `VITE_PUBLIC_BASE_URL` for their respective origins and restart/rebuild the relevant workspace.
 
+## Local Redis and Windows startup
+
+The included `docker-compose.yml` starts PostgreSQL and Redis as separate services. If PostgreSQL is already installed locally on port `5432`, start only Redis with `docker compose up -d redis`; this avoids a port collision and leaves the local database untouched. Set `REDIS_URL=redis://localhost:6379` in the ignored root `.env` file. Keep the rest of `.env` intact. Verify with `docker compose ps redis` and `docker compose exec redis redis-cli ping` (`PONG` means Redis is ready).
+
+On Windows, Docker Desktop needs WSL 2 and the Virtual Machine Platform feature to run Linux containers. The first-time feature installation needs administrator PowerShell and a restart (`wsl --install --no-distribution`). Enable Docker Desktop's **Start Docker Desktop when you sign in** preference. The Redis Compose service has a persistent `redisdata` volume and `restart: unless-stopped`: after the initial `docker compose up -d redis`, the container starts when Docker's engine starts at a later sign-in, unless it was explicitly stopped. Start the application separately from the repository root with `npm run dev`.
+
+When onboarding a teammate, each person needs Docker Desktop/WSL 2, their own `.env` values, a reachable PostgreSQL database, and the one-time `docker compose up -d redis` command. `.env` is ignored by Git and must not be committed. For a shared development team, replace each local Redis container with a reachable development Redis service; isolated local containers do not share analytics events/cache across contributors' machines.
+
 ## Redirect decision flow
 
 1. A browser or QR scanner requests `GET /:alias` or `GET /qr/:alias` from Express on port `3000`.
 2. `/qr/:alias` is registered before the generic `/:alias` handler and tags the event source as `QR`; normal links use `LINK`.
-3. Express lowercases the alias and checks the process-local LRU cache (maximum 5,000 records, 30-second TTL). A cache miss reads the `Link` row from PostgreSQL through Prisma.
+3. Express lowercases the alias and checks Redis for a shared `Link` cache entry (30-second TTL). A cache miss reads PostgreSQL through Prisma. Without `REDIS_URL` locally, it uses the process-local LRU cache instead. If configured Redis is temporarily unavailable after startup, the cache fails open to PostgreSQL.
 4. The redirect handler checks the destination host against `BlockedDomain` entries and calls the shared `effectiveStatus` rule engine.
-5. A valid link gets HTTP 302 to `destinationUrl`; failures get HTTP 302 to a LinkPulse status or unlock route, with the target origin taken from `APP_URL`.
-6. Valid visits are enriched and queued for persistence; blocked visits are queued as `BlockedAttempt` rows where the current code records a reason.
+5. A valid visit is recorded once and gets HTTP 302 to the React interstitial at `APP_URL/continue/:alias`. The visitor can continue immediately or is sent to the destination after three seconds.
+6. The interstitial makes a read-only request to `/api/public/resolve/:alias` to show the destination hostname. This endpoint does not record a second click and allows the final permitted click to resolve after its limit counter has been consumed.
+7. Failures get HTTP 302 to a LinkPulse status or unlock route, with the target origin taken from `APP_URL`. Successful password unlock records the visit once and opens the same interstitial.
+8. Valid visits are enriched and queued for persistence; blocked visits are queued as `BlockedAttempt` rows where the current code records a reason.
 
 The rule order is:
 
@@ -32,7 +42,7 @@ The rule order is:
 | Destination domain is blocklisted | `DISABLED` → `/status/disabled` |
 | All checks pass | `REDIRECT` → destination URL |
 
-For a password-protected link, the unlock page posts the password to `/api/public/unlock/:alias`. Express verifies the bcrypt hash, checks the rules again, records the successful visit, and returns the destination URL. The browser then navigates to that URL. Wrong passwords queue a `BlockedAttempt` with `WRONG_PASSWORD`.
+For a password-protected link, the unlock page posts the password to `/api/public/unlock/:alias`. Express verifies the bcrypt hash, checks the rules again, records the successful visit, and returns the destination URL to the app. The app keeps that URL in session storage for the current browser tab and displays the same interstitial. Wrong passwords queue a `BlockedAttempt` with `WRONG_PASSWORD`.
 
 ## Click count and event persistence
 
@@ -47,16 +57,21 @@ Click enrichment records:
 - Device, browser, and operating system from `ua-parser-js`.
 - Country, region, city, and rounded latitude/longitude when `geoip-lite` can resolve the IP. Localhost traffic normally has no geo result.
 
-`clickQueue.ts` batches click and blocked-attempt writes: it flushes after one second or when either buffer reaches 50 entries. Analytics read the persisted `ClickEvent` table, so a newly redirected click may take about a second to appear. The standard human metrics exclude `isBot = true`; analytics can request bot inclusion through the `includeBots=true` filter. The visitor hash rotates daily, so unique visitors are approximate daily identities, not a durable person-level identity.
+With `REDIS_URL` configured, `clickQueue.ts` appends click and blocked-attempt events to the `linkpulse:analytics:events` Redis Stream. A consumer group reads new entries, persists each event in a Prisma transaction, and acknowledges/deletes it only after success. Idle pending entries are reclaimed after 30 seconds. The event UUID is also the Prisma row ID, so a retry after a worker crash cannot double-increment an unlimited link's click counter. Analytics read the persisted `ClickEvent` table; a new event appears after the worker commits it. Without Redis in local development, a best-effort in-memory queue flushes directly to PostgreSQL. The standard human metrics exclude `isBot = true`; analytics can request bot inclusion through the `includeBots=true` filter. The visitor hash rotates daily, so unique visitors are approximate daily identities, not a durable person-level identity.
 
 ## Known implementation limits
 
-- The LRU cache and event buffers are in process memory. They are not shared between server instances, and queued events can be lost if the process stops or a database write fails before persistence.
-- The cache may serve a link record for up to 30 seconds. Link edits and admin disable invalidate the local cache, but invalidation is not distributed to other app processes.
+- If Redis is not configured locally, the LRU cache and event queue are in process memory and queued events can be lost if the process stops before persistence.
+- With Redis configured, link records use a shared 30-second Redis cache; edits and admin disable delete the shared key. Redis outages bypass the cache and read PostgreSQL; new events temporarily use the local fallback queue until Redis reconnects.
+- Redis Stream events are retained while pending and deleted after database persistence; configure Redis persistence/backups because the stream is a durability boundary for production analytics.
 - GeoIP depends on the local `geoip-lite` database and cannot resolve private/local addresses.
 - Analytics currently groups series by UTC date; although users have a saved timezone and the API passes it to the time-series function, the current implementation does not apply that timezone. This should be corrected before describing daily reports as timezone-aware.
 - A blocklisted destination currently uses the general `DISABLED` status page/reason because `BlockReason` has no separate blocklist value.
 - Redirect errors are logged on the server and returned as a generic 500 response. A structured, durable safety/audit log is not currently implemented.
+
+## Neon and Redis deployment notes
+
+The interstitial does not depend on a database-specific feature: destination lookup and click records continue through Prisma/PostgreSQL, so Neon can replace local PostgreSQL through `DATABASE_URL` and Prisma migrations. In production, Redis provides shared link caching and a consumer-group event stream; keep Redis available to every API instance and use a persistent managed Redis plan. `REDIS_URL` is required at production startup. Local development can omit it and use the documented in-memory fallback.
 
 ## Future Pulse Safety Record (not implemented)
 
@@ -64,11 +79,13 @@ If Pulse Safety Record becomes a feature, it should be designed as a separate ap
 
 ## Quick local checks
 
-With PostgreSQL and both workspaces running, use an existing link alias on the backend origin:
+Start Redis (if configured) and PostgreSQL, then start both workspaces from the repository root with `npm run dev`. Use an existing link alias on the backend origin:
 
 ```text
 http://localhost:3000/<alias>
 http://localhost:3000/qr/<alias>
 ```
 
-Expected outcomes: a live link returns a 302 to its destination; a disabled/expired/limited link returns a 302 to the matching LinkPulse status route under `http://localhost:5174`; a protected link goes to `/unlock/<alias>`. Check analytics after the queue flush delay. `GET /health` on port 3000 should return `{"status":"ok"}`.
+Expected outcomes: a live link returns a 302 to `http://localhost:5174/continue/<alias>`; the page shows a 3-second countdown and an immediate continue action. A disabled/expired/limited link returns a 302 to the matching LinkPulse status route under `http://localhost:5174`; a protected link goes to `/unlock/<alias>` and then to the interstitial after a correct password. The visit is recorded on the initial short-link request (or after successful password entry), not again when the interstitial resolves its destination. Check analytics after the queue flush delay. `GET /health` on port 3000 should return `{"status":"ok"}`.
+
+Runtime check status on 2026-10-18: server and web builds and Prisma schema validation passed. The API health route returned HTTP 200 in local development without Redis. Redis container startup has not yet been verified on Windows because enabling WSL/Virtual Machine Platform is pending the user's restart; repeat the Redis `PONG` and API stream startup checks after reboot.
