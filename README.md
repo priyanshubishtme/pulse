@@ -325,9 +325,7 @@ LinkPulse is released under the [MIT License](LICENSE). You are free to use, mod
 
 <hr />
 
-<p align="center">
-  <strong>LinkPulse</strong><br />
+<p >
   Thoughtful links, made with care.<br />
   <strong>Developed by Priyanshu Bisht</strong><br />
-  <a href="https://www.figma.com/design/KBrKYr6s84ZDaEG3ClHUF6">Explore the Figma design</a>
 </p>
