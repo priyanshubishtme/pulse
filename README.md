@@ -20,7 +20,7 @@
 - [Lightweight deployment on Render](#lightweight-deployment-on-render)
 - [Delivery phases reflected in Git history](#delivery-phases-reflected-in-git-history)
 - [Redirect behavior and verification](#redirect-behavior-and-verification)
-- [Figma UI redesign brief](#figma-ui-redesign-brief)
+- [UI design reference](#ui-design-reference)
 
 > **Governed links. Clear analytics. Practical controls.**
 >
@@ -178,19 +178,18 @@ See [`docs/final/API.md`](docs/final/API.md) for the route list and [`docs/final
 | [Redirect operations](redirection.md) | Redirect rules, continue tokens, click recording, Redis behavior, known limits |
 | [Progress log](docs/PROGRESS.md) | Delivery history and current verification notes |
 | [Release notes](Bugs.md) | Fixed issues, current gaps, verification snapshot |
-| [Product design pack](docs/design/01-prd.md) | PRD, ERD, architecture, flows, redirect rules, metric definitions |
+| [Product design pack](docs/design/01-prd.md) | PRD, ERD, architecture, flows, redirect rules, metric definitions, UI design reference |
 | [Final technical reference](docs/final/API.md) | API, requirements, algorithms, analytics queries, performance |
 | [Frontend workspace](web/README.md) | Browser route map and frontend commands |
-| [Figma redesign brief](FIGMA_UI_AGENT_PROMPT.md) | Implementation brief and reference guidance |
+| [UI design reference](docs/design/07-ui-design-reference.md) | Figma foundations, visual tokens, component states, and product layout guidance |
 
 ## Repository layout
 
 ```text
 server/                 Express API, domain modules, Prisma schema/migrations/seed
 web/                    React application, pages, shared UI, charts and QR designer
-docs/design/            Product requirements, ERD, architecture and workflow specs
+docs/design/            Product requirements, ERD, architecture, workflows, metrics, and UI design reference
 docs/final/             API, SRS, algorithms, queries and performance documentation
-FIGMA_UI_AGENT_PROMPT.md  Ready-to-use frontend redesign brief with Figma reference image
 ```
 
 ## Setup and local development
@@ -315,6 +314,6 @@ Read [`redirection.md`](redirection.md) for the redirect decision sequence, stat
 
 Analytics currently groups daily time-series data in UTC. The saved account timezone is not yet applied to those buckets. With Redis connected, production click and blocked-attempt events are stored in a Redis Stream until a consumer persists them to PostgreSQL; local fallback buffering remains in process memory when Redis is not configured or temporarily unavailable. The actual Redis container startup on this Windows machine is pending the WSL-enabling restart.
 
-## Figma UI redesign brief
+## UI design reference
 
-To give an AI coding agent the frontend redesign task, start with [`FIGMA_UI_AGENT_PROMPT.md`](FIGMA_UI_AGENT_PROMPT.md). It includes the Figma foundations screenshot, exact palette, type/layout direction, route-by-route guidance, image/illustration rules, functional constraints, and implementation sequence. The current Figma file supplies foundations only, not finished product screens.
+The [UI design reference](docs/design/07-ui-design-reference.md) documents the supplied Figma foundations board, visual tokens, component states, accessibility expectations, and the current product areas. The Figma file contains foundations rather than finished application screens.
