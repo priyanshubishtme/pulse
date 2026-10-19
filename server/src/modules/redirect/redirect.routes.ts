@@ -7,6 +7,8 @@ import { effectiveStatus } from './ruleEngine';
 import { enqueueClick, enqueueBlock } from '../clicks/clickQueue';
 import { config } from '../../config';
 import rateLimit from 'express-rate-limit';
+import { matchesDomain, normalizeDomain } from '../../lib/domains';
+import { createContinueToken, getContinueTokenState } from './continueToken';
 
 const router = Router();
 
@@ -15,6 +17,20 @@ const unlockLimiter = rateLimit({
   max: 5,
   message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many unlock attempts, please try again later.' } }
 });
+
+async function isDestinationBlocked(destinationUrl: string): Promise<boolean> {
+  let hostname: string;
+  try {
+    hostname = normalizeDomain(new URL(destinationUrl).hostname) || '';
+  } catch {
+    // Never send a malformed legacy destination to a browser.
+    return true;
+  }
+  if (!hostname) return true;
+
+  const blocklists = await prisma.blockedDomain.findMany({ select: { domain: true } });
+  return blocklists.some(blocked => matchesDomain(hostname, blocked.domain));
+}
 
 router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
   const alias = (req.params.alias as string).toLowerCase();
@@ -41,12 +57,7 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
   }
 
   // Check rule engine again using the now unlocked status
-  let isDomainBlocked = false;
-  try {
-    const hostname = new URL(link.destinationUrl).hostname;
-    const blocklists = await prisma.blockedDomain.findMany();
-    isDomainBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
-  } catch {}
+  const isDomainBlocked = await isDestinationBlocked(link.destinationUrl);
 
   const decision = effectiveStatus(link, new Date(), true, isDomainBlocked);
 
@@ -62,7 +73,7 @@ router.post('/api/public/unlock/:alias', unlockLimiter, async (req, res) => {
 
   try {
     await processValidRedirect(link, 'LINK', req);
-    res.json({ destinationUrl: link.destinationUrl });
+    res.json({ destinationUrl: link.destinationUrl, continueToken: createContinueToken(alias, true) });
   } catch (err: any) {
     if (err.message === 'LIMIT_REACHED') {
       res.status(403).json({ error: { code: 'LIMIT_REACHED', message: 'Limit reached concurrently' } });
@@ -79,20 +90,20 @@ router.get('/api/public/resolve/:alias', async (req, res) => {
   const link = await prisma.link.findUnique({ where: { alias } });
   if (!link) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Link not found' } });
 
-  let isDomainBlocked = false;
-  try {
-    const hostname = new URL(link.destinationUrl).hostname;
-    const blocklists = await prisma.blockedDomain.findMany();
-    isDomainBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
-  } catch {}
+  const isDomainBlocked = await isDestinationBlocked(link.destinationUrl);
 
   // The short-link request already reserved/consumed this visit before sending
   // the browser to the interstitial. Do not reject that same visit because it
   // just became the final allowed click.
-  const decision = effectiveStatus({ ...link, clickLimit: null }, new Date(), false, isDomainBlocked);
+  const continueToken = getContinueTokenState(alias, req.query.token);
+  const decision = effectiveStatus({ ...link, clickLimit: null }, new Date(), continueToken.valid && continueToken.unlocked, isDomainBlocked);
   if (decision !== 'REDIRECT') {
     return res.status(decision === 'PASSWORD_REQUIRED' ? 423 : decision === 'NOT_FOUND' ? 404 : 403)
       .json({ error: { code: decision, message: `Link is ${decision.toLowerCase()}` } });
+  }
+
+  if (!continueToken.valid) {
+    return res.status(403).json({ error: { code: 'INVALID_CONTINUE_TOKEN', message: 'This redirect session is no longer valid.' } });
   }
 
   return res.json({ destinationUrl: link.destinationUrl });
@@ -131,14 +142,7 @@ async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
     if (link) await linkCache.set(alias, link);
   }
 
-  let isDomainBlocked = false;
-  if (link) {
-    try {
-      const hostname = new URL(link.destinationUrl).hostname;
-      const blocklists = await prisma.blockedDomain.findMany();
-      isDomainBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
-    } catch {}
-  }
+  const isDomainBlocked = link ? await isDestinationBlocked(link.destinationUrl) : false;
 
   const decision = effectiveStatus(link, new Date(), false, isDomainBlocked);
 
@@ -171,6 +175,7 @@ async function redirectHandler(req: any, res: any, source: 'LINK' | 'QR') {
     await processValidRedirect(link, source, req);
     const continueUrl = new URL(`/continue/${encodeURIComponent(alias)}`, config.appUrl);
     continueUrl.searchParams.set('source', source.toLowerCase());
+    continueUrl.searchParams.set('token', createContinueToken(alias));
     return res.redirect(302, continueUrl.toString());
   } catch (err: any) {
     console.error('Redirect Error:', err);

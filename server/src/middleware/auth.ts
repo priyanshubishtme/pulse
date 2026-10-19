@@ -6,7 +6,10 @@ import prisma from '../lib/prisma';
 export interface AuthRequest extends Request {
   user?: {
     id: string;
+    email: string;
+    name: string;
     role: string;
+    isActive: boolean;
     timezone: string;
   };
 }
@@ -26,11 +29,15 @@ export const requireAuth = async (req: AuthRequest, res: Response, next: NextFun
     // Verify user exists and get fresh role/timezone
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
-      select: { id: true, role: true, timezone: true }
+      select: { id: true, email: true, name: true, role: true, timezone: true, isActive: true }
     });
 
     if (!user) {
       return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'User not found' } });
+    }
+
+    if (!user.isActive) {
+      return res.status(401).json({ error: { code: 'ACCOUNT_DISABLED', message: 'Account is disabled' } });
     }
 
     req.user = user;

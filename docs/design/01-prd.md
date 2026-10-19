@@ -1,5 +1,17 @@
 # LinkPulse Product Requirements Document (PRD)
 
+> **DESIGN PACK | 01 OF 06 | PRODUCT REQUIREMENTS**
+
+## Contents
+
+- [1. Problem](#1-problem)
+- [2. Personas](#2-personas)
+- [3. Goals and Non-Goals](#3-goals-and-non-goals)
+- [4. MoSCoW Scope](#4-moscow-scope)
+- [5. Success Metrics](#5-success-metrics)
+- [6. Risks](#6-risks)
+- [7. Demo Scenarios](#7-demo-scenarios)
+
 ## 1. Problem
 Basic shorteners map a code to a URL, but teams need links, rules, analytics, and takedown to work as one cohesive flow. When sharing links, teams need to track campaign performance, enforce access controls, and understand exactly *who* and *how* their audience interacts with the link. Currently, these capabilities are either missing, disconnected, or difficult to manage securely.
 
@@ -20,7 +32,7 @@ Basic shorteners map a code to a URL, but teams need links, rules, analytics, an
 - Link-in-bio pages.
 - Public API keys / Workspaces.
 - Real-time WebSockets (polling is acceptable).
-- Microservices, Kafka, Redis, GraphQL.
+- Microservices, Kafka, GraphQL, and Redis as a required dependency. Redis is optional for shared caching and stream-backed analytics.
 
 ## 4. MoSCoW Scope
 ### Must Have
@@ -44,14 +56,14 @@ Basic shorteners map a code to a URL, but teams need links, rules, analytics, an
 - See Non-Goals.
 
 ## 5. Success Metrics
-- **Performance:** Redirect latency remains consistently low (e.g., <50ms server response).
+- **Performance target:** Keep redirect latency low; any numeric latency target must be measured against a documented workload before it is treated as an SLO.
 - **Reliability:** 100% accurate rule enforcement (click limits, expiry, takedowns).
 - **Usability:** Users successfully complete the 2-step creation wizard without confusion.
 - **Data Integrity:** Analytics exclude 100% of identified bot traffic from primary KPIs, while keeping a record for admin review.
 
 ## 6. Risks
 - **Concurrency:** Click limits being exceeded under heavy concurrent traffic. (Mitigated by atomic DB updates).
-- **Performance bottleneck:** DB writes blocking redirects. (Mitigated by in-memory click queueing and batch flushing).
+- **Performance bottleneck:** Analytics persistence should not block the normal redirect response flow; bounded-link admission still uses a PostgreSQL update.
 - **Security:** Brute forcing link passwords or generating reserved aliases. (Mitigated by rate limiting and strict alias validation).
 
 ## 7. Demo Scenarios

@@ -1,32 +1,41 @@
-# React + TypeScript + Vite
+# LinkPulse Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> **WORKSPACE GUIDE | REACT FRONTEND**
 
-Currently, two official plugins are available:
+## Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [At a glance](#at-a-glance)
+- [Browser route map](#browser-route-map)
+- [Implementation notes](#implementation-notes)
 
-## React Compiler
+> **Frontend workspace** · React 19 · TypeScript · Vite
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The `web` workspace contains the LinkPulse dashboard and public browser flows: authentication, link and campaign management, analytics, QR design, CSV import, administrator controls, status pages, password unlock, and the redirect interstitial.
 
-## Expanding the Oxlint configuration
+## At a glance
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+| Task | Command (from repository root) |
+|---|---|
+| Start server and web app | `npm run dev` |
+| Build this workspace | `npm run build --workspace web` |
+| Lint this workspace | `npm run lint --workspace web` |
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+The API and browser app are developed together. See the [root README](../README.md) for setup, environment variables, architecture, and deployment; see the [API reference](../docs/final/API.md) for backend contracts.
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Browser route map
+
+| Area | Route pattern | Access |
+|---|---|---|
+| Sign in / sign up | `/login`, `/signup` | Public |
+| Dashboard and product tools | `/`, `/links`, `/campaigns`, `/analytics`, `/qr-codes`, `/import` | Signed in |
+| Platform administration | `/admin` | Active `ADMIN` account |
+| Redirect experience | `/continue/:alias`, `/unlock/:alias`, `/status/:reason` | Public |
+
+Routes are defined in `src/routes.tsx`; `src/components/layout/ProtectedRoute.tsx` handles session and role gating. Public redirects are issued by the Express service and continue in this frontend.
+
+## Implementation notes
+
+- API requests use the shared Axios client and the server's HTTP-only session cookie.
+- TanStack Query manages server state; Recharts renders analytics views.
+- QR images are generated in the browser. Destination data is not sent to an external QR service.
+- Keep public pages and generated UI behavior aligned with the root [redirect guide](../redirection.md).

@@ -1,14 +1,10 @@
 import app from './app';
-import * as dotenv from 'dotenv';
-import path from 'path';
+import { config } from './config';
 import { connectRedis, disconnectRedis } from './lib/redis';
 import { startClickQueue, stopClickQueue } from './modules/clicks/clickQueue';
 import prisma from './lib/prisma';
 
-// Load .env from the root directory
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-
-const PORT = process.env.PORT || 3000;
+const PORT = config.port;
 
 async function start() {
   await connectRedis();

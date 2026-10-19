@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
 
-interface User {
+export type UserRole = 'USER' | 'ADMIN';
+
+export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'USER' | 'ADMIN';
+  /** ADMIN is the platform-wide super-admin role. */
+  role: UserRole;
   timezone: string;
 }
 

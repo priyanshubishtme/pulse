@@ -1,5 +1,19 @@
 # LinkPulse Frontend Redesign — Agent Execution Brief
 
+> **DESIGN HANDOFF | FRONTEND IMPLEMENTATION BRIEF**
+
+## Contents
+
+- [Design source and available references](#design-source-and-available-references)
+- [Objective](#objective)
+- [First inspect the working product](#first-inspect-the-working-product)
+- [Figma foundations to implement](#figma-foundations-to-implement)
+- [Page-by-page redesign guidance](#page-by-page-redesign-guidance)
+- [Images, illustration, and visual storytelling](#images-illustration-and-visual-storytelling)
+- [Non-negotiable functional and technical constraints](#non-negotiable-functional-and-technical-constraints)
+- [Suggested execution plan](#suggested-execution-plan)
+- [Completion report required from the agent](#completion-report-required-from-the-agent)
+
 Use this file as the implementation brief for an AI coding agent working in this repository. The goal is to bring the existing LinkPulse product UI into the visual language of the supplied Figma design while preserving the real app and its existing workflows.
 
 ## Design source and available references

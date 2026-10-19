@@ -1,5 +1,6 @@
 import prisma from '../../lib/prisma';
 import { config } from '../../config';
+import { matchesDomain, normalizeDomain } from '../../lib/domains';
 
 export interface ValidationIssue {
   field: string;
@@ -24,14 +25,14 @@ export async function validateDestination(url: string, ownerId: string): Promise
     return [{ field: 'destination', level: 'error', code: 'INVALID_URL', message: 'Invalid URL format.' }];
   }
 
-  const hostname = parsedUrl.hostname;
+  const hostname = normalizeDomain(parsedUrl.hostname) || parsedUrl.hostname.toLowerCase();
 
   if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === new URL(config.appUrl).hostname) {
     issues.push({ field: 'destination', level: 'error', code: 'LOOP_PROTECTION', message: 'Cannot link to localhost or the application domain itself.' });
   }
 
   const blocklists = await prisma.blockedDomain.findMany();
-  const isBlocked = blocklists.some(b => hostname === b.domain || hostname.endsWith(`.${b.domain}`));
+  const isBlocked = blocklists.some(b => matchesDomain(hostname, b.domain));
 
   if (isBlocked) {
     issues.push({ field: 'destination', level: 'error', code: 'DOMAIN_BLOCKED', message: `The domain ${hostname} is blocklisted.` });

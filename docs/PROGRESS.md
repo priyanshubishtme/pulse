@@ -1,5 +1,25 @@
 # LinkPulse Progress
 
+> **DELIVERY LOG | PHASES AND VERIFICATION**
+
+## Contents
+
+- [Phase D1 - Design Pack](#phase-d1-design-pack)
+- [Phase 0 - Skeleton](#phase-0-skeleton)
+- [Phase 1 - Auth and Roles](#phase-1-auth-and-roles)
+- [Phase 2 - Link CRUD and the Creation Wizard](#phase-2-link-crud-and-the-creation-wizard)
+- [Phase 3 - Redirect Engine and Click Logging (plus Deploy Readiness)](#phase-3-redirect-engine-and-click-logging-plus-deploy-readiness)
+- [Code Review Fixes](#code-review-fixes)
+- [Phase 4 - Campaigns and Tags](#phase-4-campaigns-and-tags)
+- [Phase 5 - Analytics](#phase-5-analytics)
+- [Phase 6 - QR Designer and Tracking](#phase-6-qr-designer-and-tracking)
+- [Phase 7 - Bulk Import and Admin](#phase-7-bulk-import-and-admin)
+- [Phase 8 - Polish and seed data](#phase-8-polish-and-seed-data)
+- [Phase 9 - Final documentation](#phase-9-final-documentation)
+- [Final Review Fixes](#final-review-fixes)
+- [Phase 10 - Redirect interstitial, optional Redis analytics, and local operations](#phase-10-redirect-interstitial-optional-redis-analytics-and-local-operations)
+- [Phase 11 - Super-admin controls and redirect completion](#phase-11-super-admin-controls-and-redirect-completion)
+
 ## Phase D1 - Design Pack
 - **Built:** Created `docs/design/` containing `01-prd.md`, `02-erd.md`, `03-architecture.md`, `04-sequence-diagrams.md`, `05-redirect-decision-table.md`, and `06-analytics-metric-definitions.md`.
 - **How to run:** N/A (Markdown documents).
@@ -71,9 +91,24 @@
 
 ## Final Review Fixes
 - **Built:** Fixed fatal Express 5 TypeScript compilation issue where `req.params.id` was typed as a union array, crashing Prisma string typechecks. Addressed analytics feedback by building the missing `CampaignDetail.tsx` page to display dedicated advanced comparisons and routing.
+
+## Phase 12 - Frontend route-level code splitting
+- **Built:** Converted Dashboard, Links, Create Link, Campaigns, Campaign Detail, Analytics, QR Codes, Import, and Super Admin pages to `React.lazy()` imports in `web/src/routes.tsx`. Added a shared accessible `Suspense` loading state so the initial bundle does not include every authenticated workspace screen.
+- **Validation:** `npm run build --workspace web` passed and emitted separate route chunks; the previous Vite large-chunk advisory no longer appeared. Web lint completed with the two existing `AuthContext` warnings, and `git diff --check` passed.
 - **Failures:** None. All tests passing and types are solid.
 
-## Phase 10 - Redirect interstitial, Redis analytics, and local operations
-- **Built:** Added the branded three-second continue page and a read-only destination resolve endpoint. Short-link and QR visits are counted at admission and sent through a Redis Stream consumer group for transactional, idempotent PostgreSQL persistence. Redis provides a shared 30-second link cache; the in-process cache and event queue remain available for local development without `REDIS_URL`. Added the Redis Compose service with AOF, a persistent named volume, a health check, and `restart: unless-stopped`. Updated setup, deployment, and redirect runbooks with Windows WSL prerequisites, per-user `.env` handling, Redis readiness checks, team onboarding notes, and the difference between local Docker Redis and shared managed Redis.
-- **How to run:** On Windows, first install WSL 2/Virtual Machine Platform from administrator PowerShell with `wsl --install --no-distribution` and restart if prompted. Enable Docker Desktop's start-on-sign-in setting. Run `docker compose up -d redis`, add `REDIS_URL=redis://localhost:6379` to the ignored root `.env`, confirm `docker compose exec redis redis-cli ping` prints `PONG`, then run `npm run dev`.
-- **Validation:** Server build, web production build, Prisma schema validation, Docker Compose configuration parsing, redirect/API health check (`GET /health` returned HTTP 200), and `git diff --check` passed. The web build reports a large-chunk advisory. Automated tests and a live Redis stream round trip were not run. On this Windows machine, WSL feature activation/restart is pending, so Docker engine and Redis container startup still need a post-reboot check.
+## Phase 10 - Redirect interstitial, optional Redis analytics, and local operations
+- **Built:** Added the branded three-second continue page and a read-only destination resolve endpoint. Short-link and QR visits are counted at admission and use PostgreSQL persistence through the in-process fallback by default. When configured, Redis adds a Stream consumer group for transactional, idempotent persistence and a shared 30-second link cache. Added the Redis Compose service with AOF, a persistent named volume, a health check, and `restart: unless-stopped`. Updated setup, deployment, and redirect runbooks with Windows WSL prerequisites, per-user `.env` handling, optional Redis readiness checks, team onboarding notes, and the difference between the lightweight single-service path and shared Redis scale-up.
+- **How to run:** The lightest local path uses an existing PostgreSQL instance and leaves `REDIS_URL` empty before `npm run dev`. To exercise the optional shared Redis path on Windows, install WSL 2/Virtual Machine Platform, run `docker compose up -d redis`, set `REDIS_URL=redis://localhost:6379`, confirm `docker compose exec redis redis-cli ping` prints `PONG`, then run `npm run dev`.
+- **Validation:** Server build, web production build, Prisma schema validation, Docker Compose configuration parsing, redirect/API health check (`GET /health` returned HTTP 200), and `git diff --check` passed. The later route-level code-splitting pass removed the web large-chunk advisory. Automated tests and a live Redis stream round trip were not run in this phase. On this Windows machine, WSL feature activation/restart is pending, so Docker engine and Redis container startup still need a post-reboot check.
+
+## Phase 11 - Super-admin controls and redirect completion
+- **Built:** Made `ADMIN` explicit as the platform-wide super-admin role. Added protected platform APIs for overview metrics, paginated link search/filter/sort/status controls, user account status, recent activity, and normalized destination blocklisting. Added the `User.isActive` migration and prevented disabling the current or last active super-admin. The frontend now exposes these controls from `/admin` with loading, empty, error, retry, and action states.
+- **Built:** Completed the public redirect experience with a destination-aware three-second interstitial, immediate external continue action, QR/source context, password unlock handling, and status routing. Removed browser storage of unlocked destinations and added a short-lived signed continue token so direct destination resolution cannot bypass click-limit admission.
+- **Documentation:** Updated `docs/DEPLOYMENT.md`, `docs/final/API.md`, `redirection.md`, `README.md`, and added `Bugs.md` for fixed defects, release gaps, security notes, and exact verification commands.
+- **Validation:** `npm test` passed with 27 tests and 3 database-dependent tests skipped; the root build passed for both web and server; Prisma validation and `git diff --check` passed. Web lint completed with two existing `AuthContext` warnings; route-level code splitting removed the web large-chunk advisory. Docker/WSL, Redis, and migrated database E2E remain environment-dependent checks.
+
+## Phase 12 - Documentation presentation and architecture alignment
+- **Built:** Restyled the README and every repository Markdown guide with consistent section hierarchy, document labels, navigable contents, clearer reference tables, and a documentation map. Replaced the frontend template README with project-specific route and workspace guidance.
+- **Built:** Updated architecture and sequence diagrams to reflect the signed continue-token flow, current Redis/local cache and event paths, bounded-click admission, current admin role, and current Prisma relationships. Corrected API paths and marked UTC analytics behavior and unverified performance figures clearly.
+- **Verification:** All local Markdown links and heading anchors resolved. `git diff --check` reported no whitespace errors. Application builds and automated tests were not run for this documentation-only update.

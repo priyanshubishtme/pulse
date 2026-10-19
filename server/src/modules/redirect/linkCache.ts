@@ -19,28 +19,25 @@ function hydrateLink(value: string): Link | null {
 
 export const linkCache = {
   async get(alias: string): Promise<Link | null> {
-    if (redisClient) {
-      if (!redisClient.isReady) return null;
+    if (redisClient?.isReady) {
       try {
         const value = await redisClient.get(redisKey(alias));
         return value ? hydrateLink(value) : null;
       } catch (error) {
         console.error('Redis link cache read failed:', error);
-        return null;
+        return localCache.get(alias) ?? null;
       }
     }
     return localCache.get(alias) ?? null;
   },
 
   async set(alias: string, link: Link): Promise<void> {
-    if (redisClient) {
-      if (!redisClient.isReady) return;
+    if (redisClient?.isReady) {
       try {
         await redisClient.set(redisKey(alias), JSON.stringify(link), { EX: 30 });
       } catch (error) {
         console.error('Redis link cache write failed:', error);
       }
-      return;
     }
     localCache.set(alias, link);
   },
@@ -52,6 +49,20 @@ export const linkCache = {
       await redisClient.del(redisKey(alias));
     } catch (error) {
       console.error('Redis link cache invalidation failed:', error);
+    }
+  },
+
+  async clear(): Promise<void> {
+    localCache.clear();
+    if (!redisClient?.isReady) return;
+    try {
+      const keys: string[] = [];
+      for await (const key of redisClient.scanIterator({ MATCH: 'linkpulse:link:*', COUNT: 100 })) {
+        keys.push(String(key));
+      }
+      if (keys.length) await redisClient.del(keys);
+    } catch (error) {
+      console.error('Redis link cache clear failed:', error);
     }
   }
 };

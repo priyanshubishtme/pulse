@@ -49,7 +49,7 @@ export async function signup(data: z.infer<typeof signupSchema>) {
   });
 
   const token = jwt.sign({ id: user.id }, config.jwtSecret, { expiresIn: '7d' });
-  return { user: { id: user.id, email: user.email, name: user.name, role: user.role, timezone: user.timezone }, token };
+  return { user: { id: user.id, email: user.email, name: user.name, role: user.role, isActive: user.isActive, timezone: user.timezone }, token };
 }
 
 export async function login(data: z.infer<typeof loginSchema>) {
@@ -65,6 +65,10 @@ export async function login(data: z.infer<typeof loginSchema>) {
     throw { status: 401, code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' };
   }
 
+  if (!user.isActive) {
+    throw { status: 403, code: 'ACCOUNT_DISABLED', message: 'This account is disabled. Contact a super-admin.' };
+  }
+
   const token = jwt.sign({ id: user.id }, config.jwtSecret, { expiresIn: '7d' });
-  return { user: { id: user.id, email: user.email, name: user.name, role: user.role, timezone: user.timezone }, token };
+  return { user: { id: user.id, email: user.email, name: user.name, role: user.role, isActive: user.isActive, timezone: user.timezone }, token };
 }

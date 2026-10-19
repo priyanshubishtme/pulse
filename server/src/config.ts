@@ -14,7 +14,7 @@ export const config = {
   isProd
 };
 
-if (isProd && (!config.jwtSecret || !config.serverSalt || !config.redisUrl)) {
-  console.error("Missing required production environment variables: JWT_SECRET, SERVER_SALT, and REDIS_URL are required");
+if (isProd && (!config.jwtSecret || !config.serverSalt)) {
+  console.error("Missing required production environment variables: JWT_SECRET and SERVER_SALT are required");
   process.exit(1);
 }

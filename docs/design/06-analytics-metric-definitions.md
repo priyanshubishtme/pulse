@@ -1,10 +1,21 @@
 # Analytics Metric Definitions
 
-These rules strictly govern how analytics are computed globally across the platform.
+> **DESIGN PACK | 06 OF 06 | ANALYTICS METRICS**
+
+## Contents
+
+- [Core Rules](#core-rules)
+- [Definitions](#definitions)
+- [Time Series & Charts](#time-series-charts)
+- [Insight Rules (Rule-based)](#insight-rules-rule-based)
+- [Alerts](#alerts)
+- [Filters](#filters)
+
+This page is the intended product vocabulary for analytics. Where an item differs from current runtime behavior, the implementation note below calls that out explicitly.
 
 ## Core Rules
 - **Bots Excluded:** All KPIs and charts count **only** events where `isBot = false`. Bot traffic is aggregated separately for its own specific tile or admin abuse views.
-- **Timezone:** All daily bucketing and heatmaps are processed in the user's saved IANA timezone.
+- **Timezone:** Daily time-series bucketing currently uses UTC. User timezones are stored, but reports should not be described as localized until timezone-aware bucketing is implemented.
 - **Empty States:** Charts and metrics show `0` or zero-filled series; they are never left blank.
 
 ## Definitions
@@ -18,9 +29,9 @@ These rules strictly govern how analytics are computed globally across the platf
 - **Total Links:** Count of all links (respects campaign and tag filters).
 
 ## Time Series & Charts
-- **Time Series:** One point per calendar day in the user's timezone. Data is zero-filled so empty days appear on the chart. (Hourly buckets are used if Range ≤ 48h).
+- **Time Series:** Daily series are bucketed by UTC date and zero-filled so empty days appear on the chart. Verify the analytics implementation before relying on hourly buckets or user-local time.
 - **Top Links:** Ranked by clicks in the range, ties broken by newest created. Each row includes a sparkline and trend vs. previous period.
-- **Heatmap:** 7 (days) × 24 (hours) grid of click counts in the user's timezone. The best slot is the maximum cell (requires ≥ 30 clicks overall; else show empty state).
+- **Heatmap:** Product definition: 7 days × 24 hours. Its timezone and threshold behavior must match the live analytics query before being presented as a runtime guarantee.
 - **Channels:** Derived from referrer hostname:
   - `SOCIAL`: instagram, facebook, x.com/twitter, linkedin, youtube, reddit, whatsapp, t.me, pinterest
   - `SEARCH`: google, bing, duckduckgo, yahoo
@@ -30,7 +41,7 @@ These rules strictly govern how analytics are computed globally across the platf
 - **Geo:** Derived via `geoip-lite`. Map aggregates by country. City bubbles aggregate by rounded lat/lng (1 decimal). Unknown locations are excluded from the map but noted in a footnote.
 
 ## Insight Rules (Rule-based)
-Shown only when there are ≥ 30 clicks in the range:
+Product insight candidates (confirm current implementation before treating each as an active feature):
 - Best day-hour slot.
 - Top country share.
 - Mobile share above 60%.
@@ -41,6 +52,8 @@ Shown only when there are ≥ 30 clicks in the range:
 - Bot ratio > 20% (shown as a warning).
 
 ## Alerts
+
+The currently implemented alert rules are defined in `server/src/modules/analytics/alerts.ts`; keep this list aligned when those rules change.
 - Link expiring within 7 days.
 - Link at ≥ 80% of click limit.
 - Traffic spike: today's traffic > 3× the 7-day average.

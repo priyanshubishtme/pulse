@@ -1,145 +1,140 @@
-# Sequence Diagrams
+# LinkPulse Sequence Diagrams
 
-## a) Create Link with Validation
+> **DESIGN PACK | 04 OF 06 | REQUEST FLOWS**
+
+## Contents
+
+- [Create a link](#create-a-link)
+- [Redirect and deferred analytics](#redirect-and-deferred-analytics)
+- [Password-protected redirect](#password-protected-redirect)
+- [Super-admin status change](#super-admin-status-change)
+- [CSV import](#csv-import)
+
+> **Design pack · 04 / 06** · Current request behavior across the browser, API, and database
+
+[← Architecture](03-architecture.md) · [Redirect decision table →](05-redirect-decision-table.md)
+
+## Create a link
 
 ```mermaid
 sequenceDiagram
     actor User
-    participant Web as Web (React)
-    participant API as API (Express)
-    participant LinkService
-    participant Validator as urlValidator & aliasService
-    participant DB as Postgres (Prisma)
-
-    User->>Web: Enters URL and Alias
-    Web->>API: POST /links/validate {url, alias}
-    API->>Validator: Validate input
-    Validator->>DB: Check global alias uniqueness & user's exact URL
-    Validator-->>API: Return issues (errors/warnings)
-    API-->>Web: Return validation issues
-    Web-->>User: Show warnings in Review box
-    User->>Web: Clicks "Create Link"
-    Web->>API: POST /links {data}
-    API->>LinkService: createLink(data)
-    LinkService->>Validator: Re-run validation
-    Validator-->>LinkService: OK
-    LinkService->>DB: INSERT into Link
-    DB-->>LinkService: success
-    LinkService-->>API: Created Link
+    participant Web as React wizard
+    participant API as Express links API
+    participant DB as PostgreSQL
+    User->>Web: Enter destination, alias, and options
+    Web->>API: POST /api/links/validate
+    API->>DB: Check alias and ownership constraints
+    API-->>Web: Validation errors and warnings
+    User->>Web: Confirm creation
+    Web->>API: POST /api/links
+    API->>API: Validate input and owner scope
+    API->>DB: Insert link and relations
+    DB-->>API: Created link
     API-->>Web: 201 Created
-    Web-->>User: Show success, copy button, QR
+    Web-->>User: Show link and available actions
 ```
 
-## b) Redirect Happy Path with Async Logging
+## Redirect and deferred analytics
 
 ```mermaid
 sequenceDiagram
     actor Visitor
-    participant Server as GET /:alias
-    participant Cache as LRU Cache
-    participant Engine as Rule Engine
-    participant Queue as Click Queue
-    participant DB as Postgres
-
-    Visitor->>Server: HTTP GET /short123
-    Server->>Cache: Lookup "short123"
-    alt Cache Miss
-        Cache-->>Server: null
-        Server->>DB: SELECT * FROM Link WHERE alias = "short123"
-        DB-->>Server: Link Data
-        Server->>Cache: Set "short123" (TTL 30s)
-    else Cache Hit
-        Cache-->>Server: Link Data
+    participant API as Express redirect
+    participant Cache as Redis or LRU
+    participant DB as PostgreSQL
+    participant Q as Redis Stream or local queue
+    participant Web as Continue page
+    Visitor->>API: GET /:alias or /qr/:alias
+    API->>Cache: Lookup alias
+    opt Cache miss
+        API->>DB: Read link
+        DB-->>API: Link record
+        API->>Cache: Store for 30 seconds
     end
-    
-    Server->>Engine: effectiveStatus(Link, now)
-    Engine-->>Server: REDIRECT
-    
-    alt Has Click Limit
-        Server->>DB: UPDATE Link SET clickCount = clickCount + 1 WHERE id = X AND clickCount < limit
-        DB-->>Server: 1 row changed
+    API->>DB: Check blocked destination domains
+    API->>API: Evaluate status, expiry, limit, and password
+    opt Bounded link and non-bot visitor
+        API->>DB: Atomic conditional click increment
     end
-
-    Server->>Queue: enqueue(clickEvent)
-    Server-->>Visitor: 302 Found (Destination URL)
-    
-    Note right of Queue: Async batch flush
-    loop Every 1s or 50 items
-        Queue->>Queue: Enrich (UA, Geo, Hash)
-        Queue->>DB: INSERT into ClickEvent
-    end
+    API->>Q: Enqueue enriched event
+    API-->>Visitor: 302 to continue page with signed token
+    Visitor->>Web: Load /continue/:alias
+    Web->>API: GET /api/public/resolve/:alias?token=...
+    API->>API: Recheck current rules and token (120 second expiry)
+    API-->>Web: Destination URL, without a second event
+    Web-->>Visitor: Immediate continue action and timed navigation
+    Q->>DB: Persist event and any deferred unlimited-link count
 ```
 
-## c) Password-Protected Redirect
+With Redis enabled, the consumer group persists stream entries transactionally and acknowledges them after persistence. Without Redis, the in-process queue is best effort and may lose buffered events on process exit.
+
+## Password-protected redirect
 
 ```mermaid
 sequenceDiagram
     actor Visitor
-    participant Server as GET /:alias
-    participant Engine as Rule Engine
-    participant API as POST /unlock
-
-    Visitor->>Server: HTTP GET /secure123
-    Server->>Engine: effectiveStatus(Link, now)
-    Engine-->>Server: PASSWORD_REQUIRED
-    Server-->>Visitor: 302 Found (/unlock/secure123)
-    
-    Visitor->>API: Submits password via form
-    API->>API: Check Rate Limit (5/min/IP)
-    API->>API: bcrypt.compare()
-    alt Correct Password
-        API->>API: Log click event to Queue
-        API-->>Visitor: 200 OK (Destination URL)
-    else Wrong Password
-        API->>API: Log to BlockedAttempt
-        API-->>Visitor: 401 Unauthorized
+    participant API as Express redirect and unlock routes
+    participant DB as PostgreSQL
+    participant Web as Unlock / continue pages
+    Visitor->>API: GET /:alias
+    API->>DB: Load link and check redirect rules
+    API-->>Visitor: 302 /unlock/:alias
+    Visitor->>Web: Submit password
+    Web->>API: POST /api/public/unlock/:alias
+    API->>API: Apply 5 attempts per minute limiter
+    API->>DB: Read password hash and current link state
+    API->>API: bcrypt compare, blocklist check, rule recheck
+    alt Wrong password
+        API->>DB: Queue blocked attempt
+        API-->>Web: 401 Unauthorized
+    else Valid password and link still allowed
+        API->>DB: Reserve bounded human click atomically
+        API->>API: Queue click and sign 120 second unlocked token
+        API-->>Web: Destination plus continue token
+        Web->>API: Resolve destination using token
+        API-->>Web: Destination URL
+    else Link is no longer allowed
+        API-->>Web: 403 with rule decision
     end
 ```
 
-## d) Admin Disable & Cache Invalidation
+## Super-admin status change
 
 ```mermaid
 sequenceDiagram
-    actor Admin
-    participant API as POST /admin/links/:id/disable
-    participant DB as Postgres
-    participant Cache as LRU Cache
-
-    Admin->>API: Disable Link + Reason
-    API->>DB: UPDATE Link SET status = DISABLED, disabledReason = "Abuse"
-    DB-->>API: success
-    API->>Cache: delete("badalias")
-    API-->>Admin: 200 OK
+    actor Admin as Active super-admin
+    participant Web as Admin page
+    participant API as Protected admin API
+    participant DB as PostgreSQL
+    participant Cache as Redis or local LRU
+    Admin->>Web: Disable link with optional reason
+    Web->>API: PATCH /api/admin/links/:id/status
+    API->>API: Require authenticated ADMIN and validate body
+    API->>DB: Set status and disabledReason
+    DB-->>API: Updated link
+    API->>Cache: Invalidate alias cache entry
+    API-->>Web: Updated link
+    Web-->>Admin: Refresh platform link state
 ```
 
-## e) CSV Import
+## CSV import
 
 ```mermaid
 sequenceDiagram
     actor User
-    participant Web as Web (Papa Parse)
-    participant API as POST /import/commit
-    participant DB as Postgres (Transaction)
-    participant Validator as Validator Services
-
-    User->>Web: Uploads CSV
-    Web->>Web: Parse CSV & show preview
-    User->>Web: Maps columns & submits
-    Web->>API: Send Array of Link Data (max 1000)
-    API->>DB: BEGIN Transaction
-    loop For every 100 rows
-        loop For each row
-            API->>Validator: Validate (URL, Alias)
-            alt Duplicate/Invalid
-                API->>API: Mark row outcome (e.g. DUPLICATE_ALIAS)
-            else Valid
-                API->>DB: INSERT Link
-                API->>API: Mark row outcome ADDED
-            end
-        end
-    end
-    API->>DB: INSERT ImportBatch and ImportRows
-    API->>DB: COMMIT Transaction
-    API-->>Web: Return Batch Outcomes
-    Web-->>User: Show Added/Rejected metrics & download error CSV
+    participant Web as React import page
+    participant API as Express import route
+    participant DB as PostgreSQL
+    User->>Web: Select CSV and map columns
+    Web->>Web: Parse and preview rows
+    User->>Web: Confirm import
+    Web->>API: POST /api/import/commit with rows
+    API->>API: Validate and process rows; classify invalid and duplicate outcomes
+    API->>DB: Create valid links and batch/row result records
+    DB-->>API: Persisted outcomes
+    API-->>Web: Added, duplicate, and rejected results
+    Web-->>User: Summary and downloadable correction report
 ```
+
+> **Implementation note:** import is processed by the server with per-row validation and recorded outcomes. Do not assume the entire upload is one all-or-nothing database transaction.

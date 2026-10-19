@@ -5,7 +5,9 @@ import prisma from '../lib/prisma';
 import bcrypt from 'bcrypt';
 import { config } from '../config';
 
-describe('End to End Flow', () => {
+const describeWithDatabase = process.env.RUN_DB_TESTS === '1' && process.env.DATABASE_URL ? describe : describe.skip;
+
+describeWithDatabase('End to End Flow', () => {
   let token = '';
   let linkId = '';
   let alias = '';

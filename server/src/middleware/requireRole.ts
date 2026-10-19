@@ -1,7 +1,10 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from './auth';
 
-export const requireRole = (role: 'ADMIN' | 'USER') => {
+/** ADMIN is the platform-wide super-admin role in the current schema. */
+export const SUPER_ADMIN_ROLE = 'ADMIN' as const;
+
+export const requireRole = (role: typeof SUPER_ADMIN_ROLE | 'USER') => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Authentication required' } });
@@ -14,3 +17,5 @@ export const requireRole = (role: 'ADMIN' | 'USER') => {
     next();
   };
 };
+
+export const requireSuperAdmin = requireRole(SUPER_ADMIN_ROLE);

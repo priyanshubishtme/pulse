@@ -1,5 +1,18 @@
 # LinkPulse Redirect and Click Recording
 
+> **OPERATIONS GUIDE | PUBLIC REDIRECTS AND ANALYTICS**
+
+## Contents
+
+- [Local addresses and the redirect-to-app issue](#local-addresses-and-the-redirect-to-app-issue)
+- [Local Redis and Windows startup](#local-redis-and-windows-startup)
+- [Redirect decision flow](#redirect-decision-flow)
+- [Click count and event persistence](#click-count-and-event-persistence)
+- [Known implementation limits](#known-implementation-limits)
+- [Neon and Redis deployment notes](#neon-and-redis-deployment-notes)
+- [Future Pulse Safety Record (not implemented)](#future-pulse-safety-record-not-implemented)
+- [Quick local checks](#quick-local-checks)
+
 This document describes the redirect path implemented in the current code. The source of truth is `server/src/modules/redirect/redirect.routes.ts`, `ruleEngine.ts`, `clickQueue.ts`, `server/src/modules/analytics/queries.ts`, and `server/prisma/schema.prisma`.
 
 ## Local addresses and the redirect-to-app issue
@@ -13,11 +26,11 @@ There were two separate origin mismatches. First, Vite had been allowed to move 
 
 ## Local Redis and Windows startup
 
-The included `docker-compose.yml` starts PostgreSQL and Redis as separate services. If PostgreSQL is already installed locally on port `5432`, start only Redis with `docker compose up -d redis`; this avoids a port collision and leaves the local database untouched. Set `REDIS_URL=redis://localhost:6379` in the ignored root `.env` file. Keep the rest of `.env` intact. Verify with `docker compose ps redis` and `docker compose exec redis redis-cli ping` (`PONG` means Redis is ready).
+The included `docker-compose.yml` can start PostgreSQL and Redis as separate optional services. The lightest local path starts only PostgreSQL; leave `REDIS_URL` empty and the app uses its process-local cache and queue. To exercise the optional shared path, start Redis with `docker compose up -d redis` and set `REDIS_URL=redis://localhost:6379` in the ignored root `.env` file.
 
-On Windows, Docker Desktop needs WSL 2 and the Virtual Machine Platform feature to run Linux containers. The first-time feature installation needs administrator PowerShell and a restart (`wsl --install --no-distribution`). Enable Docker Desktop's **Start Docker Desktop when you sign in** preference. The Redis Compose service has a persistent `redisdata` volume and `restart: unless-stopped`: after the initial `docker compose up -d redis`, the container starts when Docker's engine starts at a later sign-in, unless it was explicitly stopped. Start the application separately from the repository root with `npm run dev`.
+On Windows, Docker Desktop needs WSL 2 and the Virtual Machine Platform feature to run Linux containers. The first-time feature installation needs administrator PowerShell and a restart (`wsl --install --no-distribution`). Enable Docker Desktop's **Start Docker Desktop when you sign in** preference. The optional Redis Compose service has a persistent `redisdata` volume and `restart: unless-stopped`: after the initial `docker compose up -d redis`, the container starts when Docker's engine starts at a later sign-in, unless it was explicitly stopped. Start the application separately from the repository root with `npm run dev`.
 
-When onboarding a teammate, each person needs Docker Desktop/WSL 2, their own `.env` values, a reachable PostgreSQL database, and the one-time `docker compose up -d redis` command. `.env` is ignored by Git and must not be committed. For a shared development team, replace each local Redis container with a reachable development Redis service; isolated local containers do not share analytics events/cache across contributors' machines.
+When onboarding a teammate, each person needs their own `.env` values and a reachable PostgreSQL database. Docker Desktop/WSL 2 is optional and is only needed for the Compose database or Redis path. `.env` is ignored by Git and must not be committed. For a shared development team, replace each local Redis container with a reachable development Redis service; isolated local containers do not share analytics events/cache across contributors' machines.
 
 ## Redirect decision flow
 
@@ -26,8 +39,8 @@ When onboarding a teammate, each person needs Docker Desktop/WSL 2, their own `.
 3. Express lowercases the alias and checks Redis for a shared `Link` cache entry (30-second TTL). A cache miss reads PostgreSQL through Prisma. Without `REDIS_URL` locally, it uses the process-local LRU cache instead. If configured Redis is temporarily unavailable after startup, the cache fails open to PostgreSQL.
 4. The redirect handler checks the destination host against `BlockedDomain` entries and calls the shared `effectiveStatus` rule engine.
 5. A valid visit is recorded once and gets HTTP 302 to the React interstitial at `APP_URL/continue/:alias`. The visitor can continue immediately or is sent to the destination after three seconds.
-6. The interstitial makes a read-only request to `/api/public/resolve/:alias` to show the destination hostname. This endpoint does not record a second click and allows the final permitted click to resolve after its limit counter has been consumed.
-7. Failures get HTTP 302 to a LinkPulse status or unlock route, with the target origin taken from `APP_URL`. Successful password unlock records the visit once and opens the same interstitial.
+6. The interstitial makes a read-only request to `/api/public/resolve/:alias?token=...` to show the destination. The short-lived HMAC token is issued only after the initial visit is admitted (or a password is accepted); it prevents an unauthenticated caller from bypassing a click limit by resolving the destination directly. This endpoint does not record a second click and allows the approved final click to resolve after its limit counter has been consumed.
+7. Failures get HTTP 302 to a LinkPulse status or unlock route, with the target origin taken from `APP_URL`. Successful password unlock records the visit once, returns a continue token, and opens the same interstitial.
 8. Valid visits are enriched and queued for persistence; blocked visits are queued as `BlockedAttempt` rows where the current code records a reason.
 
 The rule order is:
@@ -42,7 +55,7 @@ The rule order is:
 | Destination domain is blocklisted | `DISABLED` → `/status/disabled` |
 | All checks pass | `REDIRECT` → destination URL |
 
-For a password-protected link, the unlock page posts the password to `/api/public/unlock/:alias`. Express verifies the bcrypt hash, checks the rules again, records the successful visit, and returns the destination URL to the app. The app keeps that URL in session storage for the current browser tab and displays the same interstitial. Wrong passwords queue a `BlockedAttempt` with `WRONG_PASSWORD`.
+For a password-protected link, the unlock page posts the password to `/api/public/unlock/:alias`. Express verifies the bcrypt hash, checks the rules again, records the successful visit, and returns the destination URL to the app. The app passes that one-time result into the same interstitial; a later direct visit to `/continue/:alias` must resolve the alias again instead of trusting browser storage. Wrong passwords queue a `BlockedAttempt` with `WRONG_PASSWORD`.
 
 ## Click count and event persistence
 
@@ -71,7 +84,7 @@ With `REDIS_URL` configured, `clickQueue.ts` appends click and blocked-attempt e
 
 ## Neon and Redis deployment notes
 
-The interstitial does not depend on a database-specific feature: destination lookup and click records continue through Prisma/PostgreSQL, so Neon can replace local PostgreSQL through `DATABASE_URL` and Prisma migrations. In production, Redis provides shared link caching and a consumer-group event stream; keep Redis available to every API instance and use a persistent managed Redis plan. `REDIS_URL` is required at production startup. Local development can omit it and use the documented in-memory fallback.
+The interstitial does not depend on a database-specific feature: destination lookup and click records continue through Prisma/PostgreSQL, so Neon can replace local PostgreSQL through `DATABASE_URL` and Prisma migrations. In the lightweight one-instance deployment, Redis can remain disabled. If production is scaled to multiple API instances, add a shared persistent Redis plan and set `REDIS_URL` so cache entries and analytics stream events are shared.
 
 ## Future Pulse Safety Record (not implemented)
 

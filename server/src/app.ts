@@ -13,6 +13,7 @@ import tagsRoutes from './modules/tags/tags.routes';
 import analyticsRoutes from './modules/analytics/analytics.routes';
 import importRoutes from './modules/import/import.routes';
 import adminRoutes from './modules/admin/admin.routes';
+import { createSpaFallbackMiddleware, createStaticAssetMiddleware } from './middleware/staticServing';
 
 const app = express();
 app.set('trust proxy', 1);
@@ -35,6 +36,11 @@ app.use('/api/admin', adminRoutes);
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
+
+// Serve built frontend assets only when a web build is available. The route
+// guards keep API, QR, and generic public alias requests authoritative below.
+app.use(createStaticAssetMiddleware());
+app.use(createSpaFallbackMiddleware());
 
 // Use Redirect Routes
 app.use('/', redirectRoutes);

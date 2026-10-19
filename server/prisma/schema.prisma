@@ -61,6 +61,7 @@ model User {
   name         String
   passwordHash String
   role         Role     @default(USER)
+  isActive     Boolean  @default(true)
   timezone     String   @default("UTC")
   createdAt    DateTime @default(now())
   links        Link[]

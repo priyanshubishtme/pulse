@@ -1,7 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { clsx } from 'clsx';
-import { BarChart3, Grid2X2, Link2, LogOut, Plus, QrCode, Upload } from 'lucide-react';
+import { BarChart3, Grid2X2, Link2, LogOut, Plus, QrCode, ShieldCheck, Upload } from 'lucide-react';
 
 export const Shell = () => {
   const { user, logout } = useAuth();
@@ -9,7 +9,7 @@ export const Shell = () => {
   const location = useLocation();
 
   const handleLogout = async () => {
-    await logout();
+    try { await logout(); } catch { /* local session is cleared by the server or expires naturally */ }
     navigate('/login');
   };
 
@@ -41,11 +41,11 @@ export const Shell = () => {
             </Link>
           ))}
           <Link to="/import" className={navLinkClass('/import')}><Upload className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" /><span>Import CSV</span></Link>
-          {user?.role === 'ADMIN' && <Link to="/admin" className={clsx(navLinkClass('/admin'), 'mt-5 border border-accent/30 text-accent')}>Admin</Link>}
+          {user?.role === 'ADMIN' && <Link to="/admin" className={clsx(navLinkClass('/admin'), 'mt-5 border border-accent/30 text-accent')}><ShieldCheck className="h-5 w-5" aria-hidden="true" /><span>Super admin</span></Link>}
         </nav>
         <div className="flex items-center gap-3 px-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cream text-xs font-bold text-ink">{user?.name?.slice(0, 2).toUpperCase() || 'LP'}</div>
-          <div className="min-w-0"><p className="truncate text-xs font-bold">{user?.name || 'LinkPulse member'}</p><p className="text-[11px] text-slate-300">{user?.role === 'ADMIN' ? 'Administrator' : 'Workspace member'}</p></div>
+           <div className="min-w-0"><p className="truncate text-xs font-bold">{user?.name || 'LinkPulse member'}</p><p className="text-[11px] text-slate-300">{user?.role === 'ADMIN' ? 'Super admin' : 'Workspace member'}</p></div>
         </div>
         <button onClick={handleLogout} className="mt-5 flex items-center gap-3 px-3 text-xs font-semibold text-slate-300 hover:text-cream"><LogOut className="h-4 w-4" aria-hidden="true" /> Log out</button>
       </aside>

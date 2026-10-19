@@ -1,5 +1,11 @@
 # Entity Relationship Diagram (ERD)
 
+> **DESIGN PACK | 02 OF 06 | DATA MODEL**
+
+## Contents
+
+- [Entity Descriptions](#entity-descriptions)
+
 ```mermaid
 erDiagram
     User ||--o{ Campaign : owns
@@ -18,13 +24,14 @@ erDiagram
         String name
         String passwordHash
         Role role "USER or ADMIN"
+        Boolean isActive
         String timezone "IANA timezone"
         DateTime createdAt
     }
 
     Campaign {
         String id PK
-        String ownerId FK
+        String ownerId "Scalar owner reference; no User relation in schema"
         String name
         CampaignCategory category
         DateTime startsAt
@@ -100,7 +107,7 @@ erDiagram
 
     ImportBatch {
         String id PK
-        String ownerId FK
+        String ownerId "Scalar; no User relation declared"
         DateTime createdAt
         Int added
         Int rejected
@@ -117,13 +124,18 @@ erDiagram
 ```
 
 ## Entity Descriptions
-- **User**: Represents a person registered in the system, either a standard USER or an ADMIN.
-- **Campaign**: A time-bound organizational grouping for links, owned by a specific User.
-- **Tag**: A label to organize links, owned by a specific User.
-- **Link**: The core entity representing a short URL, storing its destination, rules, and current status.
-- **LinkTag**: A many-to-many relationship mapping between Links and Tags.
-- **ClickEvent**: An occurrence of a human or bot visiting a Link, enriched with geo and device data.
-- **BlockedAttempt**: A record of a visit that failed to redirect due to rules (e.g., limit reached, disabled).
-- **BlockedDomain**: A platform-wide list of domains that are not allowed as destinations (managed by Admin).
-- **ImportBatch**: A record of a bulk CSV upload session for auditing and progress tracking.
-- **ImportRow**: The outcome of an individual row processed within an ImportBatch.
+
+| Entity | Purpose and relationship notes |
+|---|---|
+| `User` | Registered account with `USER` or `ADMIN` role and active status. Owns links, campaigns, and tags. |
+| `Campaign` | User-owned grouping for links; optional dates and archive timestamp. Deleting a campaign unassigns links. |
+| `Tag` | User-owned label connected to links through `LinkTag`. |
+| `Link` | Short URL, destination, status, access rules, and click counter. |
+| `LinkTag` | Composite-key many-to-many join; either parent deletion cascades. |
+| `ClickEvent` | Human or bot visit with source, daily visitor hash, and available device/referrer/geo fields. |
+| `BlockedAttempt` | Visit rejected by a redirect rule; records the reason and privacy-preserving visitor hash. |
+| `BlockedDomain` | Platform-wide unique destination hostname maintained by super-admins. |
+| `ImportBatch` | Import summary; `ownerId` is a scalar and the current schema has no relation to `User`. |
+| `ImportRow` | Per-row result belonging to a batch; rows cascade when the batch is deleted. |
+
+> **Schema source of truth:** [`server/prisma/schema.prisma`](../../server/prisma/schema.prisma). This ERD describes declared Prisma relations; `ImportBatch.ownerId` is intentionally shown without a foreign-key edge.
