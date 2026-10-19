@@ -15,7 +15,7 @@
 
 The Figma file contains a foundations board, not finished screens for the dashboard or product workflows. Use it as a visual reference for the palette, type, and component treatments; base page behavior and content on the implemented application.
 
-- **Figma file:** [LinkPulse Product Design](https://www.figma.com/design/KBrKYr6s84ZDaEG3ClHUF6/LinkPulse-%E2%80%94-Product-Design?node-id=0-1&p=f)
+- **Figma file:** [LinkPulse Product Design](https://www.figma.com/design/KBrKYr6s84ZDaEG3ClHUF6)
 - **Frame:** `9:632` — Foundations / Tokens and components
 - **Local export:** [Foundations board](assets/figma-foundations.png)
 

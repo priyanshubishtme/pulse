@@ -21,6 +21,7 @@
 - [Delivery phases reflected in Git history](#delivery-phases-reflected-in-git-history)
 - [Redirect behavior and verification](#redirect-behavior-and-verification)
 - [UI design reference](#ui-design-reference)
+- [License](#license)
 
 > **Governed links. Clear analytics. Practical controls.**
 >
@@ -317,3 +318,16 @@ Analytics currently groups daily time-series data in UTC. The saved account time
 ## UI design reference
 
 The [UI design reference](docs/design/07-ui-design-reference.md) documents the supplied Figma foundations board, visual tokens, component states, accessibility expectations, and the current product areas. The Figma file contains foundations rather than finished application screens.
+
+## License
+
+LinkPulse is released under the [MIT License](LICENSE). You are free to use, modify, and redistribute the software under its terms.
+
+<hr />
+
+<p align="center">
+  <strong>LinkPulse</strong><br />
+  Thoughtful links, made with care.<br />
+  <strong>Developed by Priyanshu Bisht</strong><br />
+  <a href="https://www.figma.com/design/KBrKYr6s84ZDaEG3ClHUF6">Explore the Figma design</a>
+</p>
