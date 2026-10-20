@@ -212,11 +212,50 @@ See [`docs/final/API.md`](docs/final/API.md) for the route list and [`docs/final
 ## Repository layout
 
 ```text
-server/                 Express API, domain modules, Prisma schema/migrations/seed
-web/                    React application, pages, shared UI, charts and QR designer
-docs/design/            Product requirements, ERD, architecture, workflows, metrics, and UI design reference
-docs/final/             API, SRS, algorithms, queries and performance documentation
+LinkPulse/
+├── package.json                 Root npm workspaces and scripts
+├── package-lock.json            Locked workspace dependencies
+├── docker-compose.yml           Local PostgreSQL and optional Redis services
+├── .env.example                 Environment variable template (no local secrets)
+├── README.md                    Product, setup, deployment, and architecture guide
+├── CONTRIBUTORS.md              Draft contributor descriptions for review
+├── Bugs.md                      Release notes and known gaps
+├── server/
+│   ├── Dockerfile                Production image for the unified app
+│   ├── package.json              API workspace scripts and dependencies
+│   ├── prisma/
+│   │   ├── schema.prisma         Database models and enums
+│   │   ├── migrations/           Versioned database migrations
+│   │   └── seed.ts               Local demo users and data
+│   └── src/
+│       ├── app.ts, server.ts     Express app and startup
+│       ├── config.ts             Environment-backed server configuration
+│       ├── middleware/           Authentication, roles, rate limits, SPA serving
+│       ├── lib/                  Database, Redis, domain and alias helpers
+│       ├── modules/              Auth, links, redirect, clicks, analytics, admin, etc.
+│       └── tests/                Backend unit and integration tests
+├── web/
+│   ├── package.json              React workspace scripts and dependencies
+│   └── src/
+│       ├── routes.tsx            Public and protected application routes
+│       ├── pages/                Login, dashboard, links, QR, analytics, admin
+│       ├── components/           Shared layout, UI, charts and QR designer
+│       ├── context/              Authentication state
+│       ├── api/                  Shared HTTP client
+│       └── index.css             Tailwind setup and shared styles
+├── docs/
+│   ├── DEPLOYMENT.md             Environment and hosting instructions
+│   ├── SECURITY_AND_REDIRECTS.md Redirect safeguards and security notes
+│   ├── PROGRESS.md               Development and delivery log
+│   ├── design/                   Product requirements, architecture, ERD and flows
+│   └── final/                    API, SRS, algorithms, queries and performance
+├── Design/                       Product UI references and screenshots
+├── DESIGN/                       Contributor design files and source assets
+└── LinkPulse — Product Design (2)/ Supplied product-design references
 ```
+
+The tree highlights the main code and documentation locations; generated
+dependencies, local `.env`, and runtime logs are omitted.
 
 ## Setup and local development
 
