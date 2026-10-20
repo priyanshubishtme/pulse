@@ -74,7 +74,7 @@ For a custom domain, use the same service with a domain you control, for example
 
 | Field | Value |
 |---|---|
-| Email | `admin@hackbuddy.com` |
+| Email | `admin@hackbuddies.com` |
 | Password | `Admin@123` |
 
 This initial credential was supplied for the provisioned super-admin account.
