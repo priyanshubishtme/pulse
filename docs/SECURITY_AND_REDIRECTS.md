@@ -9,12 +9,14 @@ The provisioned production super-admin account uses this email:
 
 | Field | Value |
 |---|---|
-| Email | `admin@hackbuddies.com` |
+| Email | `admin@hackbuddy.com` |
+| Initial password | `Admin@123` |
 | Role | `ADMIN` (super-admin) |
 
-The production password is intentionally not stored in this repository or in
-public documentation. Keep it in the deployment secret manager and rotate it
-after the first login. The application stores bcrypt password hashes, not the
+This initial password was supplied for the provisioned super-admin account and
+is documented in plaintext at the owner's request. Rotate it before publishing
+this change or sharing the account. Keep the replacement in the deployment
+secret manager. The application stores bcrypt password hashes, not the
 submitted plaintext. Do not reuse a production password for another service.
 
 If the account already exists as a normal user, promote it from the Render
@@ -23,7 +25,7 @@ PostgreSQL console with:
 ```sql
 UPDATE "User"
 SET "role" = 'ADMIN', "isActive" = TRUE
-WHERE LOWER("email") = LOWER('admin@hackbuddies.com')
+WHERE LOWER("email") = LOWER('admin@hackbuddy.com')
 RETURNING "id", "email", "role", "isActive";
 ```
 

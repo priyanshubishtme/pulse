@@ -70,6 +70,19 @@ stream when enabled in the Render environment.
 
 For a custom domain, use the same service with a domain you control, for example `https://go.yourdomain.com` for public links and `https://app.yourdomain.com` for the dashboard. The simplest first deployment can use one origin for both.
 
+## Initial super-admin login
+
+| Field | Value |
+|---|---|
+| Email | `admin@hackbuddy.com` |
+| Password | `Admin@123` |
+
+This initial credential was supplied for the provisioned super-admin account.
+It is written here in plaintext at the owner's request. Rotate it before
+publishing this change or sharing the account. The development database seed
+creates a different sample admin; these credentials are not created by
+`server/prisma/seed.ts`.
+
 ## Screenshots
 
 The repository includes the supplied product-design screenshots for the main flows:
@@ -318,8 +331,11 @@ This roadmap is reconstructed from the repository's documentation and the commit
 | 7 — CSV import and admin | CSV parsing/commit/reporting, admin link takedowns, and blocked-domain management. | `34c7c4c` |
 | 8–9 — Seed and final docs | Rich demo data and historical click events, final API/SRS/algorithm/query/performance docs, and final campaign detail/review fixes. | `34c7c4c`, `ce83397` |
 | Merge to main | Combined the completed `feat-linkpulse-core` work with `main`. | `1842263` |
+| 10 — Production hardening and responsive UI | Prisma runtime dependency in the Docker image, production static frontend serving, prevention of localhost redirects, and responsive navigation/login with route recovery. | `2b86fd8`, `3b90962`, `cbae32a`, `a3f710a` — Priyanshu Bisht |
+| Upstream integration | Merged the `origin/main` history into the active branch. | `2dc14ac` — Priyanshu Bisht |
+| 11 — Team design and documentation | Super-admin UI/UX reference and design files; LinkPulse design/screenshots; updated project and contributor documentation. | `ace2738`, `ff008f8`, `7479deb`, `1bc21f9` — DISHI RAUTELA; `636d34a`, `4d273d5` — Rohit singh rawat; `700539e` — Akshita Singh |
 
-The detailed phase log is in [`docs/PROGRESS.md`](docs/PROGRESS.md); design references are in [`docs/design/`](docs/design/).
+Commit authors above are copied from Git metadata and identify who authored each commit; they do not assign unrecorded work to a contributor. The detailed phase log is in [`docs/PROGRESS.md`](docs/PROGRESS.md); design references are in [`docs/design/`](docs/design/).
 
 ## Redirect behavior and verification
 
