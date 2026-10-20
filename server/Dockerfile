@@ -1,4 +1,9 @@
-FROM node:22-alpine
+FROM node:22-bookworm-slim
+
+# Prisma 5 needs OpenSSL available when its migration engine starts.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 ENV NODE_ENV=production
