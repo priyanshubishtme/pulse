@@ -30,7 +30,7 @@
 
 | Project | Current state |
 |---|---|
-| Deployment | Not deployed |
+| Deployment | Live on Render |
 | Required data store | PostgreSQL 15+ |
 | Optional scale-up | Redis 7+ |
 | App shape | React dashboard + Express modular monolith |
@@ -51,11 +51,22 @@ LinkPulse creates readable short aliases and evaluates every visit through one r
 
 ## Live link
 
-**Not deployed yet.** After deploying the included Docker setup to Render, replace the placeholder below with the real service URL:
+The current production deployment is live on Render:
 
 ```text
-https://<your-render-service>.onrender.com
+https://link-pulse-5chi.onrender.com
 ```
+
+Health check:
+
+```text
+https://link-pulse-5chi.onrender.com/health
+```
+
+The deployment uses one Render Web Service for the compiled React application,
+Express API, public short links, redirect interstitial, and QR routes. PostgreSQL
+is the required data store; Redis is configured as the shared cache and analytics
+stream when enabled in the Render environment.
 
 For a custom domain, use the same service with a domain you control, for example `https://go.yourdomain.com` for public links and `https://app.yourdomain.com` for the dashboard. The simplest first deployment can use one origin for both.
 

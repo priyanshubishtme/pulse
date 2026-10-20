@@ -12,6 +12,23 @@
 
 The app is built as a modular monolith but is designed to be deployed cleanly. The database connection and secrets are all provided via environment variables.
 
+## Current production deployment
+
+The live Render service is:
+
+```text
+https://link-pulse-5chi.onrender.com
+```
+
+Verify the service is healthy at:
+
+```text
+https://link-pulse-5chi.onrender.com/health
+```
+
+The unified service serves the React application, Express API, public short
+links, QR routes, and redirect interstitial from the same origin.
+
 ## Environment Variables Needed
 - `DATABASE_URL`: A PostgreSQL connection string
 - `REDIS_URL`: Optional Redis connection URL (`redis://` locally; managed Redis providers commonly supply a TLS `rediss://` URL). When omitted, the service uses its in-process LRU cache and PostgreSQL-backed best-effort event queue.
@@ -27,11 +44,18 @@ The lightweight deployment is one Render Web Service running the Express server.
 
 1. Provision one managed PostgreSQL database and copy its connection string into `DATABASE_URL`.
 2. Create one Render Web Service from this repository. The included `server/Dockerfile` builds both workspaces and runs Prisma migrations before starting Express.
-3. Set `JWT_SECRET`, `SERVER_SALT`, and `APP_URL` to the service's HTTPS origin. For the simplest one-domain deployment, set `VITE_PUBLIC_BASE_URL` to the same origin at build time or leave it unset so the browser uses the current origin.
+3. Set `JWT_SECRET`, `SERVER_SALT`, `APP_URL`, and `VITE_PUBLIC_BASE_URL` to the service's HTTPS origin. The current production values are:
+
+   ```text
+   APP_URL=https://link-pulse-5chi.onrender.com
+   VITE_PUBLIC_BASE_URL=https://link-pulse-5chi.onrender.com
+   ```
+
+   Never use a localhost value for either production URL.
 4. Keep `REDIS_URL` empty for the lightest deployment. Add a managed Redis URL later only when multiple instances, shared cache, or durable stream buffering are required.
 5. Confirm that at least one active `ADMIN` account exists. `ADMIN` is the current platform-wide **super-admin** role; it can review users, links, activity, and the destination blocklist. The API prevents a super-admin from disabling their own account or the last active super-admin.
 
-The provisioned environment's initial super-admin details and the local sample seed account are documented in [Security and redirect safeguards](SECURITY_AND_REDIRECTS.md). Rotate the provisioned account password before public launch; do not run the development seed against production.
+The provisioned environment's super-admin email and the safe promotion procedure are documented in [Security and redirect safeguards](SECURITY_AND_REDIRECTS.md). Never commit or publish a production password; set or rotate it through the production database/admin workflow. Do not run the development seed against production.
 
 The current release includes `20261019000000_add_user_active_status`; do not skip migrations because the super-admin user controls depend on `User.isActive`.
 

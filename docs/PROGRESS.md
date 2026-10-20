@@ -2,6 +2,13 @@
 
 > **DELIVERY LOG | PHASES AND VERIFICATION**
 
+## Current production state
+
+- **Live service:** `https://link-pulse-5chi.onrender.com`
+- **Health check:** `https://link-pulse-5chi.onrender.com/health`
+- **Admin route:** `https://link-pulse-5chi.onrender.com/admin` for an active `ADMIN` account
+- **Production note:** The development seed credentials are local-only. The production super-admin account is `admin@hackbuddies.com`; its password must remain outside the repository and be rotated after first login.
+
 ## Contents
 
 - [Phase D1 - Design Pack](#phase-d1-design-pack)

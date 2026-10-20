@@ -5,18 +5,39 @@ operational details needed to deploy and maintain them.
 
 ## Super-admin account
 
-The project owner supplied this initial super-admin login for the provisioned
-environment:
+The provisioned production super-admin account uses this email:
 
 | Field | Value |
 |---|---|
 | Email | `admin@hackbuddies.com` |
-| Initial password | `Admin@123` |
 | Role | `ADMIN` (super-admin) |
 
-Change this password to a unique secret before exposing the account to a public
-deployment. The application stores bcrypt password hashes, not the submitted
-plaintext. Do not reuse this initial password for another service.
+The production password is intentionally not stored in this repository or in
+public documentation. Keep it in the deployment secret manager and rotate it
+after the first login. The application stores bcrypt password hashes, not the
+submitted plaintext. Do not reuse a production password for another service.
+
+If the account already exists as a normal user, promote it from the Render
+PostgreSQL console with:
+
+```sql
+UPDATE "User"
+SET "role" = 'ADMIN', "isActive" = TRUE
+WHERE LOWER("email") = LOWER('admin@hackbuddies.com')
+RETURNING "id", "email", "role", "isActive";
+```
+
+Then log out and log back in at the live application:
+
+```text
+https://link-pulse-5chi.onrender.com/login
+```
+
+The administrator area is:
+
+```text
+https://link-pulse-5chi.onrender.com/admin
+```
 
 The development seed is separate: `server/prisma/seed.ts` creates
 `admin@linkpulse.dev` and `user@linkpulse.dev` with the development password
@@ -102,7 +123,8 @@ from feature areas.
 - Use unique production values for `JWT_SECRET` and `SERVER_SALT`; never use the
   development fallbacks.
 - Confirm that a trusted, active `ADMIN` account exists after migrations.
-- Rotate the initial super-admin password before public launch.
+- Rotate the production super-admin password after the first login and keep it
+  out of Git, README files, screenshots, and issue trackers.
 - Never copy `.env` into source control; provide runtime secrets through the
   deployment environment.
 - Keep the production database and any configured Redis service backed up.
