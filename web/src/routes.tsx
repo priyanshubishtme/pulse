@@ -7,6 +7,7 @@ import { Signup } from './pages/Signup';
 import { StatusPage } from './pages/Public/StatusPage';
 import { UnlockPage } from './pages/Public/UnlockPage';
 import { ContinuePage } from './pages/Public/ContinuePage';
+import { NotFound } from './pages/NotFound';
 
 // Keep the initial bundle focused on authentication, the shell, and public
 // status pages. Workspace screens load only when the visitor navigates to them.
@@ -36,6 +37,7 @@ export const AppRoutes = () => {
         <Route path="/status/:reason" element={<StatusPage />} />
         <Route path="/unlock/:alias" element={<UnlockPage />} />
         <Route path="/continue/:alias" element={<ContinuePage />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route element={<ProtectedRoute allowedRoles={['USER', 'ADMIN']} />}>
           <Route element={<Shell />}>

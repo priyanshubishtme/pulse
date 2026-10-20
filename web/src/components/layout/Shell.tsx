@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { clsx } from 'clsx';
-import { BarChart3, Grid2X2, Link2, LogOut, Plus, QrCode, ShieldCheck, Upload } from 'lucide-react';
+import { BarChart3, Grid2X2, Link2, LogOut, Menu, Plus, QrCode, ShieldCheck, Upload, X } from 'lucide-react';
 
 export const Shell = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try { await logout(); } catch { /* local session is cleared by the server or expires naturally */ }
@@ -20,6 +22,11 @@ export const Shell = () => {
     { label: 'Create QR code', path: '/qr-codes', icon: QrCode },
     { label: 'Analytics', path: '/analytics', icon: BarChart3 },
   ];
+
+  const mobileNavLinkClass = (path: string) => clsx(
+    'flex min-h-12 items-center gap-3 rounded-xl px-4 text-sm font-semibold',
+    location.pathname.startsWith(path) ? 'bg-primary text-cream' : 'text-slate-200 hover:bg-navy-800',
+  );
 
   const navLinkClass = (path: string) => clsx(
     'flex min-h-12 items-center gap-3 rounded-[10px] px-4 text-sm font-semibold transition-colors',
@@ -51,11 +58,21 @@ export const Shell = () => {
       </aside>
 
       <div className="min-h-screen lg:pl-[216px]">
-        <div className="flex items-center justify-between border-b border-line bg-navy-900 px-5 py-4 text-cream lg:hidden">
+        <div className="flex items-center justify-between border-b border-line bg-navy-900 px-5 py-3 text-cream lg:hidden">
           <Link to="/dashboard" className="text-xl font-extrabold tracking-[-0.06em]">Link<span className="text-accent">Pulse</span></Link>
-          <button onClick={handleLogout} className="rounded-lg p-2 text-slate-300" aria-label="Log out"><LogOut className="h-5 w-5" /></button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setMobileMenuOpen(open => !open)} className="flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-slate-100 hover:bg-navy-800" aria-expanded={mobileMenuOpen} aria-controls="mobile-workspace-navigation" aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}>
+              {mobileMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}<span className="hidden min-[360px]:inline">Menu</span>
+            </button>
+            <button onClick={handleLogout} className="flex min-h-11 min-w-11 items-center justify-center rounded-xl text-slate-300 hover:bg-navy-800" aria-label="Log out"><LogOut className="h-5 w-5" aria-hidden="true" /></button>
+          </div>
         </div>
-        <main className="mx-auto min-h-screen w-full max-w-[1224px] px-5 py-8 sm:px-8 lg:px-10 lg:py-8"><Outlet /></main>
+        {mobileMenuOpen && <nav id="mobile-workspace-navigation" aria-label="Workspace navigation" className="space-y-1 border-b border-white/10 bg-navy-900 px-4 pb-4 pt-2 text-cream lg:hidden">
+          {[...navItems, { label: 'Import CSV', path: '/import', icon: Upload }].map(({ label, path, icon: Icon }) => <Link key={path} to={path} onClick={() => setMobileMenuOpen(false)} className={mobileNavLinkClass(path)}><Icon className="h-5 w-5" aria-hidden="true" /><span>{label}</span></Link>)}
+          {user?.role === 'ADMIN' && <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className={mobileNavLinkClass('/admin')}><ShieldCheck className="h-5 w-5" aria-hidden="true" /><span>Super admin</span></Link>}
+          <div className="mt-3 border-t border-white/10 px-4 pt-3 text-xs text-slate-300">Signed in as <span className="font-semibold text-cream">{user?.name || user?.email}</span></div>
+        </nav>}
+        <main className="mx-auto min-h-screen w-full max-w-[1224px] px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-8"><Outlet /></main>
       </div>
     </div>
   );

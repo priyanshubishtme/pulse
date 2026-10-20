@@ -1,0 +1,3063 @@
+
+> linkpulse-monorepo@1.0.0 dev
+> concurrently -k -n server,web "npm run dev --workspace=server" "npm run dev --workspace=web"
+
+[server] 
+[server] > server@1.0.0 dev
+[server] > nodemon src/server.ts
+[server] 
+[web] 
+[web] > web@0.0.0 dev
+[web] > vite
+[web] 
+[web] [2m1:40:07 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+[server] [33m[nodemon] 3.1.14[39m
+[server] [33m[nodemon] to restart at any time, enter `rs`[39m
+[server] [33m[nodemon] watching path(s): *.*[39m
+[server] [33m[nodemon] watching extensions: ts,json[39m
+[server] [32m[nodemon] starting `ts-node src/server.ts`[39m
+[server] ◇ injected env (9) from ..\.env
+[web] 
+[web]   [32m[1mVITE[22m v8.3.4[39m  [2mready in [0m[1m7534[22m[2m[0m ms[22m
+[web] 
+[web]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5174[22m/[39m
+[web] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[web] [2m1:40:15 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis client error: AggregateError
+[server]     at internalConnectMultiple (node:net:1193:18)
+[server]     at afterConnectMultiple (node:net:1783:7) {
+[server]   code: 'ECONNREFUSED',
+[server]   [errors]: [
+[server]     Error: connect ECONNREFUSED ::1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '::1',
+[server]       port: 6379
+[server]     },
+[server]     Error: connect ECONNREFUSED 127.0.0.1:6379
+[server]         at createConnectionError (node:net:1746:14)
+[server]         at afterConnectMultiple (node:net:1776:16) {
+[server]       errno: -4078,
+[server]       code: 'ECONNREFUSED',
+[server]       syscall: 'connect',
+[server]       address: '127.0.0.1',
+[server]       port: 6379
+[server]     }
+[server]   ]
+[server] }
+[server] Redis reconnecting
+[server] Redis analytics stream ready (linkpulse:analytics:events)
+[server] Server is running on port 3000
+[server] [0mGET /health [32m200[0m 1.803 ms - 15[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.636 ms - 69[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.247 ms - 69[0m
+[server] [0mGET /api/auth/me [32m200[0m 41.969 ms - 136[0m
+[server] [0mGET /api/auth/me [36m304[0m 1.959 ms - -[0m
+[server] [0mGET /health [32m200[0m 0.268 ms - 15[0m
+[server] [0mGET /favicon.ico [36m302[0m 13.996 ms - 60[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.313 ms - 69[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.270 ms - 69[0m
+[server] {
+[server]   status: 409,
+[server]   code: 'EMAIL_IN_USE',
+[server]   message: 'Email is already registered'
+[server] }
+[server] [0mPOST /api/auth/signup [33m409[0m 15.571 ms - 73[0m
+[server] [0mPOST /api/auth/signup [32m201[0m 377.730 ms - 160[0m
+[server] [0mGET /api/analytics/overview?range=30 [32m200[0m 27.737 ms - 97[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [32m200[0m 55.140 ms - 1035[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [32m200[0m 64.955 ms - 42[0m
+[server] [0mGET /api/analytics/alerts [32m200[0m 79.728 ms - 13[0m
+[server] [0mGET /api/links [32m200[0m 3.978 ms - 12[0m
+[server] [0mGET /api/campaigns [32m200[0m 7.475 ms - 16[0m
+[server] [0mGET /api/tags [32m200[0m 7.853 ms - 799[0m
+[server] [0mGET /api/links [36m304[0m 2.937 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 3.885 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 6.128 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 8.973 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [32m200[0m 10.354 ms - 28[0m
+[server] [0mGET /api/campaigns [36m304[0m 40.692 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 4.467 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 3.952 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 7.061 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 12.509 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.178 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.774 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 7.289 ms - -[0m
+[server] [0mGET /api/links/check-alias?alias=priyanshu [32m200[0m 3.615 ms - 18[0m
+[server] [0mPOST /api/links/validate [32m200[0m 3.401 ms - 105[0m
+[server] [0mGET /api/links/check-alias?alias=priyanshu- [32m200[0m 2.941 ms - 18[0m
+[server] [0mGET /api/links/check-alias?alias=priyanshu-bisht [32m200[0m 2.629 ms - 18[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.925 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.717 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.783 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.569 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 2.115 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 2.610 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 2.863 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.735 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 4.261 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 5.314 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.532 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 2.497 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.758 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 3.547 ms - 105[0m
+[server] [0mPOST /api/links/validate [32m200[0m 1.942 ms - 105[0m
+[server] [0mGET /api/links [36m304[0m 4.110 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 2.433 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.974 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 5.367 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.416 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 6.689 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 8.431 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 13.114 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 4.585 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 5.421 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 9.200 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 6.995 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 6.932 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 8.679 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 13.824 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 18.778 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 5.088 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 6.591 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 6.603 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 6.888 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 10.684 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 2.626 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 94.883 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 101.023 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 115.441 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 118.215 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 209.052 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 10.384 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 11.127 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 13.249 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 9.204 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.067 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 5.818 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 5.802 ms - -[0m
+[server] [0mGET /api/links/check-alias?alias=ho [32m200[0m 2.787 ms - 104[0m
+[server] [0mGET /api/links/check-alias?alias=hospital [32m200[0m 3.471 ms - 18[0m
+[server] [0mPOST /api/links/validate [32m200[0m 8.599 ms - 13[0m
+[server] [0mPOST /api/links/validate [32m200[0m 3.872 ms - 13[0m
+[server] [0mPOST /api/links [32m201[0m 8.848 ms - 372[0m
+[server] [0mGET /api/links [32m200[0m 9.960 ms - 391[0m
+[server] [0mGET /hospital [36m302[0m 67.865 ms - 208[0m
+[server] [0mGET /api/auth/me [32m200[0m 1.971 ms - 160[0m
+[server] [0mGET /api/public/resolve/hospital?token=1792484907.0.24NWDmqj3YyGIPNq8VRAY2hSvths_Jy9LVEGRFRpM-4 [32m200[0m 8.203 ms - 44[0m
+[server] [0mGET /api/auth/me [36m304[0m 2.085 ms - -[0m
+[server] [0mGET /api/public/resolve/hospital?token=1792484907.0.24NWDmqj3YyGIPNq8VRAY2hSvths_Jy9LVEGRFRpM-4 [36m304[0m 2.463 ms - -[0m
+[server] [0mGET /api/links [32m200[0m 4.209 ms - 391[0m
+[server] [0mGET /hospital [36m302[0m 15.938 ms - 208[0m
+[server] [0mGET /api/public/resolve/hospital?token=1792484922.0.crIvFDCF853itEq1YtUmXoCTx4GS58bFkq-rSliRzAg [32m200[0m 2.939 ms - 44[0m
+[server] [0mGET /api/auth/me [36m304[0m 2.683 ms - -[0m
+[server] [0mGET /api/auth/me [36m304[0m 1.291 ms - -[0m
+[server] [0mGET /api/public/resolve/hospital?token=1792484922.0.crIvFDCF853itEq1YtUmXoCTx4GS58bFkq-rSliRzAg [36m304[0m 2.355 ms - -[0m
+[server] [0mGET /api/links [32m200[0m 3.142 ms - 391[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [32m200[0m 5.404 ms - 1035[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 6.141 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 6.535 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [32m200[0m 9.313 ms - 122[0m
+[server] [0mGET /api/analytics/overview?range=30 [32m200[0m 18.729 ms - 97[0m
+[server] [0mGET /api/links [36m304[0m 3.314 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 3.063 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 4.637 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 4.224 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.678 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 3.259 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 6.168 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 6.168 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 8.677 ms - -[0m
+[server] [0mGET /favicon.ico [36m302[0m 4.553 ms - 60[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 64.986 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 63.076 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 69.555 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 73.946 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 6.446 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 6.216 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 12.093 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 14.204 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 48.972 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 9.093 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 7.686 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 7.333 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.632 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 5.583 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 8.493 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 8.079 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 14.469 ms - -[0m
+[server] [0mPOST /api/auth/logout [32m200[0m 0.432 ms - 16[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.174 ms - 69[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.255 ms - 69[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.245 ms - 69[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.148 ms - 69[0m
+[server] [0mPOST /api/auth/login [32m200[0m 101.305 ms - 158[0m
+[server] [0mGET /api/analytics/overview?range=30 [32m200[0m 20.529 ms - 97[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [32m200[0m 55.110 ms - 1035[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [32m200[0m 56.806 ms - 42[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 62.534 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 6.335 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 5.450 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 7.915 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 14.351 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 39.658 ms - -[0m
+[server] [0mGET /api/links [32m200[0m 6.149 ms - 12[0m
+[server] [0mGET /api/campaigns [36m304[0m 6.501 ms - -[0m
+[server] [0mGET /api/tags [32m200[0m 6.629 ms - 799[0m
+[server] [0mGET /api/links [36m304[0m 3.421 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 3.825 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 6.487 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 7.603 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 9.572 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.280 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 7.086 ms - -[0m
+[server] [0mGET /api/links/check-alias?alias=hello [32m200[0m 3.956 ms - 59[0m
+[server] [0mGET /api/links/check-alias?alias=helloklk [32m200[0m 3.660 ms - 18[0m
+[server] [0mPOST /api/links/validate [32m200[0m 6.074 ms - 13[0m
+[server] [0mPOST /api/links/validate [32m200[0m 4.150 ms - 13[0m
+[server] [0mPOST /api/links [32m201[0m 8.051 ms - 372[0m
+[server] [0mGET /api/links [32m200[0m 3.757 ms - 391[0m
+[server] [0mGET /helloklk [36m302[0m 11.116 ms - 208[0m
+[server] [0mGET /api/auth/me [32m200[0m 1.379 ms - 158[0m
+[server] [0mGET /api/public/resolve/helloklk?token=1792485815.0.SumgNTJ4uTejlrOPS9p7hbECjOrawaGf1y9V0nmVrO0 [32m200[0m 5.181 ms - 44[0m
+[server] [0mGET /api/auth/me [36m304[0m 1.852 ms - -[0m
+[server] [0mGET /api/public/resolve/helloklk?token=1792485815.0.SumgNTJ4uTejlrOPS9p7hbECjOrawaGf1y9V0nmVrO0 [36m304[0m 2.318 ms - -[0m
+[server] [0mGET /api/links [32m200[0m 4.798 ms - 391[0m
+[server] [0mGET /api/links [36m304[0m 8.672 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 11.899 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [32m200[0m 17.244 ms - 1035[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 17.958 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [32m200[0m 27.422 ms - 122[0m
+[server] [0mGET /api/analytics/overview?range=30 [32m200[0m 31.158 ms - 97[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 15.003 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 13.441 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 18.293 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 25.895 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 33.714 ms - -[0m
+[server] [0mPOST /api/auth/logout [32m200[0m 0.200 ms - 16[0m
+[server] [0mPOST /api/auth/signup [32m201[0m 158.119 ms - 146[0m
+[server] [0mGET /api/analytics/overview?range=30 [32m200[0m 19.780 ms - 97[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 58.861 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [32m200[0m 60.701 ms - 1035[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [32m200[0m 64.688 ms - 42[0m
+[server] [0mGET /api/links [32m200[0m 6.202 ms - 12[0m
+[server] [0mGET /api/campaigns [36m304[0m 5.619 ms - -[0m
+[server] [0mGET /api/tags [32m200[0m 6.158 ms - 799[0m
+[server] [0mGET /api/links [36m304[0m 2.486 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 3.419 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 5.789 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 7.364 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 11.735 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 47.505 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 5.800 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 5.717 ms - -[0m
+[server] [0mGET /api/links/check-alias?alias=rohit [32m200[0m 3.004 ms - 18[0m
+[server] [0mPOST /api/links/validate [32m200[0m 6.280 ms - 13[0m
+[server] [0mPOST /api/links/validate [32m200[0m 4.270 ms - 13[0m
+[server] [0mPOST /api/links [32m201[0m 6.993 ms - 369[0m
+[server] [0mGET /api/links [32m200[0m 3.645 ms - 388[0m
+[server] [0mGET /api/links [36m304[0m 3.303 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 2.506 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.805 ms - -[0m
+[server] [0mGET /rohit [36m302[0m 18.422 ms - 205[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.153 ms - 69[0m
+[server] [0mGET /api/public/resolve/rohit?token=1792486802.0.5JeKb2VgITySmdM9jUTavVnS1tooPYQJ7Qcr2rYJwqU [32m200[0m 3.224 ms - 44[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.167 ms - 69[0m
+[server] [0mGET /api/public/resolve/rohit?token=1792486802.0.5JeKb2VgITySmdM9jUTavVnS1tooPYQJ7Qcr2rYJwqU [36m304[0m 2.151 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 4.989 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 5.381 ms - -[0m
+[server] [0mGET /api/links [32m200[0m 6.172 ms - 388[0m
+[server] [0mGET /api/links [36m304[0m 3.886 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [32m200[0m 5.210 ms - 1035[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.442 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 5.929 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [32m200[0m 8.002 ms - 122[0m
+[server] [0mGET /api/analytics/overview?range=30 [32m200[0m 15.078 ms - 97[0m
+[server] [0mGET /api/links [36m304[0m 5.512 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 3.507 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 5.671 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.873 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 5.243 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 6.416 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 7.667 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 12.819 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 2.944 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 2.867 ms - -[0m
+[server] [0mPOST /api/auth/logout [32m200[0m 0.207 ms - 16[0m
+[server] [0mPOST /api/auth/login [32m200[0m 71.677 ms - 146[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 4.718 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 6.777 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 10.717 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 14.267 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 2.848 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 2.596 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.680 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.398 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 2.863 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.667 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 2.497 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 47.017 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.508 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 4.377 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 13.446 ms - -[0m
+[server] [0mGET /api/analytics/geo?range=30 [36m304[0m 88.102 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 98.114 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 103.755 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 101.649 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 10.579 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 11.089 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.728 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 4.407 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 6.616 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 12.082 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 14.950 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 14.060 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 3.096 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 6.619 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 8.062 ms - -[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 11.650 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 8.508 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 17.334 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 5.889 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 2.603 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 5.738 ms - -[0m
+[server] [0mPOST /api/auth/logout [32m200[0m 0.275 ms - 16[0m
+[server] [0mGET /favicon.ico [36m302[0m 48.727 ms - 60[0m
+[server] [0mGET /favicon.ico [36m302[0m 34.927 ms - 60[0m
+[server] [32m[nodemon] restarting due to changes...[39m
+[server] [32m[nodemon] starting `ts-node src/server.ts`[39m
+[server] ◇ injected env (9) from ..\.env
+[server] Redis analytics stream ready (linkpulse:analytics:events)
+[server] Server is running on port 3000
+[server] [32m[nodemon] restarting due to changes...[39m
+[server] [32m[nodemon] starting `ts-node src/server.ts`[39m
+[server] ◇ injected env (9) from ..\.env
+[server] Redis analytics stream ready (linkpulse:analytics:events)
+[server] Server is running on port 3000
+[server] [0mGET /api/auth/me [33m401[0m 2.185 ms - 69[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.695 ms - 69[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490289.0.DfkGREG3U_8Ly16jm6i6rrCj5Un3kZ2N_6txUcnfAwE [33m404[0m 55.438 ms - 57[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490289.0.DfkGREG3U_8Ly16jm6i6rrCj5Un3kZ2N_6txUcnfAwE [33m404[0m 2.573 ms - 57[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.301 ms - 69[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490304.0.bJ-XnIpgsobM-DBtmEMIA_EhxlFiVjHp_flypJL6JCU [33m404[0m 2.807 ms - 57[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.357 ms - 69[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490304.0.bJ-XnIpgsobM-DBtmEMIA_EhxlFiVjHp_flypJL6JCU [33m404[0m 2.096 ms - 57[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.260 ms - 69[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490459.0.O61YRxAIeIYEMia6vBrFymr_mMXX73fWsUmiJlu7X_8 [33m404[0m 2.192 ms - 57[0m
+[server] [0mGET /api/auth/me [33m401[0m 0.167 ms - 69[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490459.0.O61YRxAIeIYEMia6vBrFymr_mMXX73fWsUmiJlu7X_8 [33m404[0m 1.556 ms - 57[0m
+[server] [0mPOST /api/auth/login [32m200[0m 78.229 ms - 146[0m
+[server] [0mGET /api/analytics/overview?range=30 [36m304[0m 26.597 ms - -[0m
+[server] [0mGET /api/analytics/timeseries?range=30 [36m304[0m 58.723 ms - -[0m
+[server] [0mGET /api/analytics/alerts [36m304[0m 63.455 ms - -[0m
+[server] [0mGET /api/analytics/breakdowns?range=30 [36m304[0m 65.309 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 10.010 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 11.972 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 5.412 ms - -[0m
+[server] [0mGET /api/campaigns [36m304[0m 6.150 ms - -[0m
+[server] [0mGET /api/tags [36m304[0m 5.828 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 4.374 ms - -[0m
+[server] [0mGET /api/links [36m304[0m 3.220 ms - -[0m
+[server] [0mGET /rohit [36m302[0m 28.418 ms - 205[0m
+[server] [0mGET /api/auth/me [32m200[0m 2.340 ms - 146[0m
+[server] [0mGET /api/public/resolve/rohit?token=1792490507.0.ny6bBZQBF8q1Rrj4BA-NoirCkFfoTNzfWkBgsxXzy0A [32m200[0m 5.772 ms - 44[0m
+[server] [0mGET /api/auth/me [36m304[0m 2.455 ms - -[0m
+[server] [0mGET /api/public/resolve/rohit?token=1792490507.0.ny6bBZQBF8q1Rrj4BA-NoirCkFfoTNzfWkBgsxXzy0A [36m304[0m 2.616 ms - -[0m
+[server] [0mGET /api/links [32m200[0m 3.392 ms - 388[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490527.0.LMn8YNFrwWCAr8YAFukPW-m7UYKXxCsTjxhorhGIrgY [33m404[0m 1.837 ms - 57[0m
+[server] [0mGET /api/auth/me [36m304[0m 1.877 ms - -[0m
+[server] [0mGET /api/public/resolve/zenz?token=1792490527.0.LMn8YNFrwWCAr8YAFukPW-m7UYKXxCsTjxhorhGIrgY [33m404[0m 1.510 ms - 57[0m
+[server] [0mGET /api/auth/me [36m304[0m 1.560 ms - -[0m
+[web] npm error Lifecycle script `dev` failed with error:
+[server] [31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[web] npm error code 4294967295
+[web] npm error path C:\Users\priya\OneDrive\Desktop\Pulse\web
+[web] npm error workspace web@0.0.0
+[web] npm error location C:\Users\priya\OneDrive\Desktop\Pulse\web
+[web] npm error command failed
+[web] npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vite
+[web] npm run dev --workspace=web exited with code 4294967295
+--> Sending SIGTERM to other processes..
+[server] npm run dev --workspace=server exited with code 1

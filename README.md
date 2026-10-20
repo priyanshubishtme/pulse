@@ -20,6 +20,7 @@
 - [Lightweight deployment on Render](#lightweight-deployment-on-render)
 - [Delivery phases reflected in Git history](#delivery-phases-reflected-in-git-history)
 - [Redirect behavior and verification](#redirect-behavior-and-verification)
+- [Security and redirect safeguards](docs/SECURITY_AND_REDIRECTS.md)
 - [UI design reference](#ui-design-reference)
 - [License](#license)
 
@@ -176,7 +177,7 @@ See [`docs/final/API.md`](docs/final/API.md) for the route list and [`docs/final
 | Guide | What it covers |
 |---|---|
 | [Deployment](docs/DEPLOYMENT.md) | Environment variables, Render, migrations, optional Redis, release checks |
-| [Redirect operations](redirection.md) | Redirect rules, continue tokens, click recording, Redis behavior, known limits |
+| [Security and redirect safeguards](docs/SECURITY_AND_REDIRECTS.md) | Super-admin setup, password-protected links, redirect safety checks, click limits, route recovery, and contributor integration |
 | [Progress log](docs/PROGRESS.md) | Delivery history and current verification notes |
 | [Release notes](Bugs.md) | Fixed issues, current gaps, verification snapshot |
 | [Product design pack](docs/design/01-prd.md) | PRD, ERD, architecture, flows, redirect rules, metric definitions, UI design reference |
@@ -311,7 +312,7 @@ The detailed phase log is in [`docs/PROGRESS.md`](docs/PROGRESS.md); design refe
 
 ## Redirect behavior and verification
 
-Read [`redirection.md`](redirection.md) for the redirect decision sequence, status and unlock behavior, local-port configuration, click-event enrichment, analytics recording, known runtime limits, and the proposed future Pulse Safety Record. Clicks are stored in `ClickEvent` and blocked visits in `BlockedAttempt`; a separate safety/audit record is not implemented.
+See [Security and redirect safeguards](docs/SECURITY_AND_REDIRECTS.md) for the current redirect decision sequence, password unlock, click limits, domain blocklist, route recovery, and known operational limits. Clicks are stored in `ClickEvent` and blocked visits in `BlockedAttempt`; a separate safety/audit record is not implemented.
 
 Analytics currently groups daily time-series data in UTC. The saved account timezone is not yet applied to those buckets. With Redis connected, production click and blocked-attempt events are stored in a Redis Stream until a consumer persists them to PostgreSQL; local fallback buffering remains in process memory when Redis is not configured or temporarily unavailable. The actual Redis container startup on this Windows machine is pending the WSL-enabling restart.
 

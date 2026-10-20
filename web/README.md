@@ -38,4 +38,4 @@ Routes are defined in `src/routes.tsx`; `src/components/layout/ProtectedRoute.ts
 - API requests use the shared Axios client and the server's HTTP-only session cookie.
 - TanStack Query manages server state; Recharts renders analytics views.
 - QR images are generated in the browser. Destination data is not sent to an external QR service.
-- Keep public pages and generated UI behavior aligned with the root [redirect guide](../redirection.md).
+- Keep public pages and generated UI behavior aligned with the root [security and redirect guide](../docs/SECURITY_AND_REDIRECTS.md).

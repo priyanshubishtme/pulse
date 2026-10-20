@@ -34,7 +34,7 @@ export const Card = ({ children, className, as: Tag = 'section', ...props }: { c
 );
 
 export const Breadcrumb = ({ current }: { current: string }) => (
-  <div className="mb-8 flex items-center gap-2 text-xs font-medium text-textMuted" aria-label="Breadcrumb">
+  <div className="mb-5 flex items-center gap-2 text-xs font-medium text-textMuted sm:mb-8" aria-label="Breadcrumb">
     <span>Workspace</span>
     <span aria-hidden="true">/</span>
     <span>{current}</span>
@@ -52,7 +52,7 @@ export const PageHeader = ({
   description?: string;
   actions?: ReactNode;
 }) => (
-  <header className="mb-10">
+  <header className="mb-8 sm:mb-10">
     <Breadcrumb current={current} />
     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <div>
@@ -64,9 +64,9 @@ export const PageHeader = ({
   </header>
 );
 
-export const Field = ({ label, hint, error, className, children }: { label: string; hint?: string; error?: string; className?: string; children: ReactNode }) => (
+export const Field = ({ label, hint, error, className, htmlFor, children }: { label: string; hint?: string; error?: string; className?: string; htmlFor?: string; children: ReactNode }) => (
   <div className={clsx('space-y-2', className)}>
-    <label className="block text-sm font-bold text-ink">{label}</label>
+    <label htmlFor={htmlFor} className="block text-sm font-bold text-ink">{label}</label>
     {children}
     {error ? <p className="text-xs leading-5 text-danger">{error}</p> : hint ? <p className="text-xs leading-5 text-textMuted">{hint}</p> : null}
   </div>

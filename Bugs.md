@@ -10,7 +10,7 @@
 
 Last reviewed: 2026-10-19
 
-This file records defects found while completing the super-admin and public redirect flows. It separates fixed behavior from gaps that still need an environment or product decision. It is not a substitute for the immutable audit trail described in `redirection.md`.
+This file records defects found while completing the super-admin and public redirect flows. It separates fixed behavior from gaps that still need an environment or product decision. A separate immutable audit trail is not implemented; see [Security and redirect safeguards](docs/SECURITY_AND_REDIRECTS.md) for the events the current application records.
 
 ## Fixed in this review
 
@@ -59,7 +59,7 @@ This file records defects found while completing the super-admin and public redi
 ### B. Docker/WSL and Redis production path are not verified here
 
 - The no-container checks pass, but Docker Desktop/WSL was intentionally not started. Redis Stream persistence, consumer-group recovery, and multi-instance cache invalidation still require a post-WSL verification.
-- Follow `docs/DEPLOYMENT.md` and `redirection.md` for the exact `docker compose` and `redis-cli PING` checks.
+- Follow `docs/DEPLOYMENT.md` and [Security and redirect safeguards](docs/SECURITY_AND_REDIRECTS.md) for deployment details and current redirect protections.
 
 ### C. Admin activity is not an immutable audit log
 

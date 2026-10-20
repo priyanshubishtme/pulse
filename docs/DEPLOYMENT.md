@@ -31,6 +31,8 @@ The lightweight deployment is one Render Web Service running the Express server.
 4. Keep `REDIS_URL` empty for the lightest deployment. Add a managed Redis URL later only when multiple instances, shared cache, or durable stream buffering are required.
 5. Confirm that at least one active `ADMIN` account exists. `ADMIN` is the current platform-wide **super-admin** role; it can review users, links, activity, and the destination blocklist. The API prevents a super-admin from disabling their own account or the last active super-admin.
 
+The provisioned environment's initial super-admin details and the local sample seed account are documented in [Security and redirect safeguards](SECURITY_AND_REDIRECTS.md). Rotate the provisioned account password before public launch; do not run the development seed against production.
+
 The current release includes `20261019000000_add_user_active_status`; do not skip migrations because the super-admin user controls depend on `User.isActive`.
 
 When Redis is enabled, the analytics stream uses at-least-once processing. Events are acknowledged and removed from the stream only after a Prisma transaction persists the event and updates its click counter. A stable event ID makes a retry idempotent. Configure Redis backups/persistence and monitor pending entries and stream length. Without Redis, the local fallback is intentionally simpler but events still in memory can be lost if the single process stops before flushing.
