@@ -57,11 +57,11 @@ export function isStaticAssetRequest(pathname: string): boolean {
 }
 
 export function resolveWebDistDir(): string | undefined {
-  // The first path is used by the compiled server (server/dist/src), while the
-  // second is used by ts-node during local development (server/src).
+  // Resolve from this nested middleware directory in both compiled and local
+  // layouts: server/dist/src/middleware and server/src/middleware.
   const candidates = [
-    path.resolve(__dirname, '../../../web/dist'),
-    path.resolve(__dirname, '../../web/dist')
+    path.resolve(__dirname, '../../../../web/dist'),
+    path.resolve(__dirname, '../../../web/dist')
   ];
 
   return candidates.find(candidate => fs.existsSync(path.join(candidate, 'index.html')));
